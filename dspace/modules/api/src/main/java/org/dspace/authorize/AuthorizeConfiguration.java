@@ -7,7 +7,12 @@
  */
 package org.dspace.authorize;
 
+import org.dspace.content.*;
 import org.dspace.core.ConfigurationManager;
+import org.dspace.core.Constants;
+import org.dspace.core.Context;
+
+import java.sql.SQLException;
 
 /**
  * This class is responsible to provide access to the configuration of the
@@ -171,78 +176,136 @@ public class AuthorizeConfiguration
             .getBooleanProperty("core.authorization.item-admin.cc-license",
                     true);
 
-
-
-
-
-
-    private static boolean can_communityAdmin_exportCollection = ConfigurationManager
-            .getBooleanProperty("core.authorization.community-admin.collection.export-collection",
-                    true);
-    private static boolean can_communityAdmin_exportCollectionMetadata = ConfigurationManager
-            .getBooleanProperty("core.authorization.community-admin.collection.export-metadata",
-                    true);
-    private static boolean can_communityAdmin_exportItemMetadata = ConfigurationManager
-            .getBooleanProperty("core.authorization.community-admin.item.export-metadata",
-                    true);
-    private static boolean can_communityAdmin_exportItem = ConfigurationManager
-            .getBooleanProperty("core.authorization.community-admin.item.export-item",
-                    true);
-    private static boolean can_communityAdmin_exportItemExtractMetadata = ConfigurationManager
-            .getBooleanProperty("core.authorization.community-admin.item.extract-metadata",
-                    true);
     /**
-     * Are community admins allowed to create new, not strictly community
-     * related, group?
+     * Is allowed manage bitstream?
      *
-     * @return
+     * @param context
+     *            the DSpace Context Object
+     * @param bitstream
+     *            the bitstream
+     * @throws AuthorizeException
+     *             if the current context (current user) is not allowed to
+     *             manage the bitstream
+     * @throws SQLException
+     *             if a db error occur
      */
-    public static boolean canCommunityAdminExportCollection()
+    public static boolean authorizeManage(Context context, String action,
+                                                      Bitstream bitstream) throws SQLException
     {
-        return can_communityAdmin_exportCollection;
-    }
-    /**
-     * Are community admins allowed to create new, not strictly community
-     * related, group?
-     *
-     * @return
-     */
-    public static boolean canCommunityAdminExportCollectionMetadata()
-    {
-        return can_communityAdmin_exportCollectionMetadata;
-    }
-    /**
-     * Are community admins allowed to create new, not strictly community
-     * related, group?
-     *
-     * @return
-     */
-    public static boolean canCommunityAdminExportItemMetadata()
-    {
-        return can_communityAdmin_exportItemMetadata;
-    }
-    /**
-     * Are community admins allowed to create new, not strictly community
-     * related, group?
-     *
-     * @return
-     */
-    public static boolean canCommunityAdminExportItem()
-    {
-        return can_communityAdmin_exportItem;
-    }
-    /**
-     * Are community admins allowed to create new, not strictly community
-     * related, group?
-     *
-     * @return
-     */
-    public static boolean canCommunityAdminExportItemExtractMetadata()
-    {
-        return can_communityAdmin_exportItemExtractMetadata;
+        Bundle bundle = bitstream.getBundles()[0];
+        return authorizeManage(context, action, bundle);
     }
 
+    /**
+     * Is allowed manage bundle?
+     *
+     * @param context
+     *            the DSpace Context Object
+     * @param bundle
+     *            the bundle that the policy refer to
+     * @throws AuthorizeException
+     *             if the current context (current user) is not allowed to
+     *             manage the bundle
+     * @throws SQLException
+     *             if a db error occur
+     */
+    public static boolean authorizeManage(Context context, String action,
+                                                   Bundle bundle) throws SQLException
+    {
+        Item item = bundle.getItems()[0];
+        return authorizeManage(context, action, item);
+    }
 
+    /**
+     * Is allowed manage item in the
+     * current context?
+     *
+     * @param context
+     *            the DSpace Context Object
+     * @param item
+     *            the item
+     * @throws AuthorizeException
+     *             if the current context (current user) is not allowed to
+     *             manage the item
+     * @throws SQLException
+     *             if a db error occur
+     */
+    public static boolean authorizeManage(Context context, String action, Item item)
+            throws SQLException
+    {
+        if (ConfigurationManager.getBooleanProperty("core.authorization.item-admin." + action, true))
+        {
+            return AuthorizeManager.authorizeActionBoolean(context, item, Constants.ADMIN);
+        }
+        else if (ConfigurationManager.getBooleanProperty("core.authorization.collection-admin." + action, true))
+        {
+            return AuthorizeManager.authorizeActionBoolean(context, item
+                    .getOwningCollection(), Constants.ADMIN);
+        }
+        else if (ConfigurationManager.getBooleanProperty("core.authorization.community-admin." + action, true))
+        {
+            return AuthorizeManager
+                    .authorizeActionBoolean(context, item.getOwningCollection()
+                            .getCommunities()[0], Constants.ADMIN);
+        }
+
+        return AuthorizeManager.isAdmin(context);
+    }
+
+    /**
+     * Is allowed manage collection in the
+     * current context?
+     *
+     * @param context
+     *            the DSpace Context Object
+     * @param collection
+     *            the collection
+     * @throws AuthorizeException
+     *             if the current context (current user) is not allowed to
+     *             manage the collection
+     * @throws SQLException
+     *             if a db error occur
+     */
+    public static boolean authorizeManage(Context context, String action,
+                                                       Collection collection) throws  SQLException
+    {
+        if (ConfigurationManager.getBooleanProperty("core.authorization.collection-admin." + action, true))
+        {
+            return AuthorizeManager.authorizeActionBoolean(context, collection,
+                    Constants.ADMIN);
+        }
+        else if (ConfigurationManager.getBooleanProperty("core.authorization.community-admin." + action, true))
+        {
+            return AuthorizeManager.authorizeActionBoolean(context, collection
+                    .getCommunities()[0], Constants.ADMIN);
+        }
+
+
+        return AuthorizeManager.isAdmin(context);
+    }
+
+    /**
+     * Is allowed manage community in the
+     * current context?
+     *
+     * @param context
+     *            the DSpace Context Object
+     * @param community
+     *            the community
+     * @throws SQLException
+     *             if a db error occur
+     */
+    public static boolean authorizeManage(Context context, String action,
+                                                      Community community) throws SQLException
+    {
+        if (ConfigurationManager.getBooleanProperty("core.authorization.community-admin." + action, true))
+        {
+            return AuthorizeManager.authorizeActionBoolean(context, community,
+                    Constants.ADMIN);
+        }
+
+        return AuthorizeManager.isAdmin(context);
+    }
 
     /**
      * Are community admins allowed to create new, not strictly community

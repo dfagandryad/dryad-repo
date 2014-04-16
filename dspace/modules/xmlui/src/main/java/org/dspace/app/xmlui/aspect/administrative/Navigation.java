@@ -223,22 +223,20 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
 //                }
 //                else
 //                {
-                    if(AuthorizeConfiguration.canCommunityAdminExportItem())  {
-                        try{
-                            AuthorizeManager.authorizeAction(this.context, item.getCollections()[0].getCommunities()[0], Constants.ADMIN);
-                            context.addItem().addXref(contextPath+"/admin/export?itemID="+item.getID(), T_context_export_item );
-                        }catch (AuthorizeException e)
-                        {}
-                    }
 
-                    if(AuthorizeConfiguration.canCommunityAdminExportItemMetadata())  {
-                        try{
-                            AuthorizeManager.authorizeAction(this.context, item.getCollections()[0].getCommunities()[0], Constants.ADMIN);
-                            context.addItem().addXref(contextPath+ "/csv/handle/"+dso.getHandle(),T_context_export_metadata );
-                        }catch (AuthorizeException e)
-                        {}
-                    }
               //  }
+            }
+            else
+            {
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export",item))  {
+
+                    context.addItem().addXref(contextPath+"/admin/export?itemID="+item.getID(), T_context_export_item );
+
+                }
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export-meta",item))  {
+                    context.addItem().addXref(contextPath+ "/csv/handle/"+dso.getHandle(),T_context_export_metadata );
+
+                }
             }
         }
         else if (dso instanceof Collection)
@@ -251,31 +249,27 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
                 context.setHead(T_context_head);
                 context.addItemXref(contextPath+"/admin/collection?collectionID=" + collection.getID(), T_context_edit_collection);
                 context.addItemXref(contextPath+"/admin/mapper?collectionID="+collection.getID(), T_context_item_mapper);
-//                if (AuthorizeManager.isAdmin(this.context, dso))
-//                {
-//                    context.addItem().addXref(contextPath+"/admin/export?collectionID="+collection.getID(), T_context_export_collection );
-//                    context.addItem().addXref(contextPath+ "/csv/handle/"+dso.getHandle(),T_context_export_metadata );
-//                }
-//                else
-//                {
-                    if(AuthorizeConfiguration.canCommunityAdminExportCollection())
-                    {
-                        try{
-                            AuthorizeManager.authorizeAction(this.context, collection.getCommunities()[0], Constants.ADMIN);
-                            context.addItem().addXref(contextPath+"/admin/export?collectionID="+collection.getID(), T_context_export_collection );
-                        }catch (AuthorizeException e)
-                        {}
-                    }
-                    if(AuthorizeConfiguration.canCommunityAdminExportCollectionMetadata())
-                    {
-                        try{
-                            AuthorizeManager.authorizeAction(this.context, collection.getCommunities()[0], Constants.ADMIN);
-                        context.addItem().addXref(contextPath+ "/csv/handle/"+dso.getHandle(),T_context_export_metadata );
-                        }catch (AuthorizeException e)
-                        {}
-                    }
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export",collection))
+                {
+                    context.addItem().addXref(contextPath+"/admin/export?collectionID="+collection.getID(), T_context_export_collection );
+                }
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export-meta",collection))
+                {
+                    context.addItem().addXref(contextPath+ "/csv/handle/"+dso.getHandle(),T_context_export_metadata );
+                }
+
                 }
             //}
+            else {
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export",collection))
+                {
+                    context.addItem().addXref(contextPath+"/admin/export?collectionID="+collection.getID(), T_context_export_collection );
+                }
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export-meta",collection))
+                {
+                    context.addItem().addXref(contextPath+ "/csv/handle/"+dso.getHandle(),T_context_export_metadata );
+                }
+            }
         }
         else if (dso instanceof Community)
         {
@@ -362,13 +356,13 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
             {
                 context.addItemXref(contextPath+"/admin/collection?collectionID=" + collection.getID(), T_context_edit_collection);
                 context.addItemXref(contextPath+"/admin/mapper?collectionID="+collection.getID(), T_context_item_mapper);
-                if(AuthorizeConfiguration.canCommunityAdminExportCollection())
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export",collection))
                 {
-
+                    context.addItem().addXref(contextPath+"/admin/export?collectionID="+collection.getID(), T_context_export_collection );
                 }
-                if(AuthorizeConfiguration.canCommunityAdminExportCollectionMetadata())
+                if(AuthorizeConfiguration.authorizeManage(this.context,"export-meta",collection))
                 {
-
+                    context.addItem().addXref(contextPath+ "/csv/handle/"+dso.getHandle(),T_context_export_metadata );
                 }
                 options++;
             }

@@ -46,7 +46,7 @@ public class AMENavigation extends AbstractDSpaceTransformer implements Cacheabl
     		Item item = (Item) dso;
     		if (item.canEdit())
     		{
-                if(AuthorizeConfiguration.canCommunityAdminExportItemExtractMetadata())
+                if(AuthorizeConfiguration.authorizeManage(this.context,"extract-meta",item))
                 {
                     try
                     {
