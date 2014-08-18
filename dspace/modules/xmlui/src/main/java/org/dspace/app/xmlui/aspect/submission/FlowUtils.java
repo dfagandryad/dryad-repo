@@ -907,13 +907,6 @@ public class FlowUtils {
         return request.getContextPath() + "/submissions";
     }
 
-    private static void setShoppingCartStatus(Context context,ShoppingCart shoppingCart)throws SQLException{
-        shoppingCart.setStatus(ShoppingCart.STATUS_DENIlED);
-        shoppingCart.setJournalSub(false);
-        PaymentSystemService paymentSystemService = new DSpace().getSingletonService(PaymentSystemService.class);
-        shoppingCart.setTotal(paymentSystemService.calculateShoppingCartTotalWithoutJournal(context,shoppingCart));
-    }
-
 
     private static void finishSubmission(Request request, Context context, Item publication) throws SQLException, AuthorizeException, IOException, TransformerException, WorkflowException, SAXException, WorkflowConfigurationException, MessagingException, ParserConfigurationException {
 
