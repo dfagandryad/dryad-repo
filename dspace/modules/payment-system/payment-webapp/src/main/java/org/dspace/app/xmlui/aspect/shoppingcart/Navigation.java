@@ -34,7 +34,6 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.content.*;
 import org.dspace.eperson.Group;
-import org.dspace.paymentsystem.PaymentSystemConfigurationManager;
 import org.xml.sax.SAXException;
 
 /**

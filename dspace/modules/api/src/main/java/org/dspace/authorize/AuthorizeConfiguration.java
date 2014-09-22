@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * This class is responsible to provide access to the configuration of the
  * Authorization System
  *
- * @author bollini
+ * @author Mark Diggory
  *
  */
 public class AuthorizeConfiguration
