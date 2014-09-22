@@ -457,7 +457,7 @@ public class AuthorizeManager
         }
         else
         {
-            Group seniorCurator = Group.findByName(c, ConfigurationManager.getProperty("group.senior-curator"));
+            Group seniorCurator = Group.findByName(c, ConfigurationManager.getProperty("core.authorization.site-admin.group"));
             if(seniorCurator==null)
             {
                 return false;
