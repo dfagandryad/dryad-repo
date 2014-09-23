@@ -163,8 +163,6 @@ public class OAuthAuthenticateAction extends AbstractAction
 
         } catch (Exception e) {
             throw new PatternException("Unable to preform authentication: " + e.getMessage(), e);
-        } finally {
-
         }
 
 

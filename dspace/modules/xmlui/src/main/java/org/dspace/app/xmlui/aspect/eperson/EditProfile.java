@@ -266,34 +266,22 @@ public class EditProfile extends AbstractDSpaceTransformer
                eperson.update();
                context.commit();
            }catch (Exception e)
-           {}
+           {
+               log.error("error when remove orcid id on eperson",e);
+           }
 
        }
        if (request.getParameter("link") != null)
        {
-           //redirect to orcid page to get authentication from orcid
            try{
-               HttpServletResponse response1 =  (HttpServletResponse)objectModel.get("httpresponse");
-               OAuthAuthzResponse oar = null;
-               try{
-                   oar = OAuthAuthzResponse.oauthCodeAuthzResponse((HttpServletRequest) objectModel.get("httprequest"));
-               }
-               catch(Exception e)
-               {}
-               // Step 1. there is no code and we need to request one.
-               OAuthClientRequest oAuthClientRequest = OAuthClientRequest
-                       .authorizationLocation(ConfigurationManager.getProperty("authentication-oauth", "application-authorize-url")) //"https://sandbox.orcid.org/oauth/authorize"
-                       .setClientId(ConfigurationManager.getProperty("authentication-oauth", "application-client-id"))
-                       .setRedirectURI(ConfigurationManager.getProperty("authentication-oauth", "application-redirect-uri"))
-                       .setResponseType("code")
-                       .setScope(ConfigurationManager.getProperty("authentication-oauth","application-client-scope"))
-                       .buildQueryMessage();
+           //redirect to orcid page to get authentication from orcid
+           HttpServletResponse response1 =  (HttpServletResponse)objectModel.get("httpresponse");
 
-               // Issue a Redirect to the OAuth site to request authorization code.
-               response1.sendRedirect(oAuthClientRequest.getLocationUri());
-
+           response1.sendRedirect("/oauth-login");
            }catch (Exception e)
-           {}
+           {
+               log.error("error when try to link to orcid",e);
+           }
 
        }
        else if (eperson != null)
@@ -307,7 +295,9 @@ public class EditProfile extends AbstractDSpaceTransformer
                 defaultOrcidId = eperson.getMetadata("orcid");
             }catch (Exception e)
 
-            {}
+            {
+                log.error("error when getting the orcid id from eperson metadata",e);
+            }
        }
        
        String action = contextPath;
