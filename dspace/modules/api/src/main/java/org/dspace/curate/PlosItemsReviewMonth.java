@@ -32,14 +32,15 @@ import org.dspace.storage.rdbms.TableRow;
 import org.apache.log4j.Logger;
 
 /**
- * ItemsInReview reports on the status of items in the review workflow.
+ * PlosItemsReviewMonth reports on items from PLOS publications that have been in the review workflow 
+ * longer than one month.
  *
  * The task succeeds if it was able to calculate the correct result.
  *
  * Input: a collection (any collection)
  * Output: a CSV indicating simple information about the data packages that are in review
  *
- * @author Ryan Scherle
+ * @author Debra Fagan/Ryan Scherle
  */
 @Distributive
 public class PlosItemsReviewMonth extends AbstractCurationTask {
