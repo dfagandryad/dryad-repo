@@ -26,7 +26,7 @@ import org.dspace.core.Constants;
 
 import org.dspace.workflow.WorkflowItem;
 import org.datadryad.api.DryadDataPackage;
-import org.datadryad.api.Manuscript;
+import org.datadryad.rest.models.Manuscript;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
 
