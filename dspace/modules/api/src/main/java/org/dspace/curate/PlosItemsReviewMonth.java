@@ -26,6 +26,7 @@ import org.dspace.core.Constants;
 
 import org.dspace.workflow.WorkflowItem;
 import org.datadryad.api.DryadDataPackage;
+import org.datadryad.api.Manuscript;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
 
@@ -143,12 +144,13 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         	String packageDOI = dataPackage.getIdentifier();
                         	String packageManuscriptNumber = dataPackage.getManuscriptNumber();
                         	
-                        	// get manuscript based on manuscript number - *DF*
+                        	// get manuscript based on manuscript number; pass in STATUS_SUBMITTED? - *DF*
                         	Manuscript packageManuscript = new Manuscript(packageManuscriptNumber, STATUS_SUBMITTED);
                         	// getDataReviewURL does not currently exist - *DF*
                         	String packageDataReviewURL = packageManuscript.getDataReviewURL();
                         	
                         	boolean notificationReceived = false;
+                        	// Does one or both of these have to be true? - *DF*
                         	if(packageDataReviewURL != null && !packageDataReviewURL.isEmpty()) {
                         		notificationReceived = true;
                         	}
