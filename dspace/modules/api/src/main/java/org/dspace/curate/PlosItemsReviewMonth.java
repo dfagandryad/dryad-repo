@@ -24,9 +24,11 @@ import org.dspace.content.Item;
 import org.dspace.core.Context;
 import org.dspace.core.Constants;
 
+//import org.datadryad.rest.models.Manuscript;
+import org.datadryad.*;
+
 import org.dspace.workflow.WorkflowItem;
 import org.datadryad.api.DryadDataPackage;
-import org.datadryad.rest.models.Manuscript;
 import org.dspace.storage.rdbms.DatabaseManager;
 import org.dspace.storage.rdbms.TableRow;
 
@@ -117,7 +119,8 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         int itemID = dataPackage.getItem().getID();
                         
                         // Where is getPublicationName method located???  - *DF*
-                        String publicationName = dataPackage.getPublicationName();
+                        // String publicationName = dataPackage.getPublicationName();
+                        String publicationName = "PlosOne";
 
                         Date lastModificationDate = dataPackage.getItem().getLastModified();
 
