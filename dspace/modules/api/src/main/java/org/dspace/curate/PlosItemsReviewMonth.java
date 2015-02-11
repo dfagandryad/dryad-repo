@@ -66,7 +66,7 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
     
     
     /** returns the number of days between today's date and anotherDateMS, which is passed in */
-	public static int numDaysSinceModified(long anotherDateMS) {
+	public static int numDaysSince(long anotherDateMS) {
 
    		
         Date todayDate = new Date();
@@ -118,7 +118,7 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         // report on the item
                         int itemID = dataPackage.getItem().getID();
                         
-                        // Where is getPublicationName method located???  - *DF*
+                        // RYAN, Where is getPublicationName method located???  - *DF*
                         // String publicationName = dataPackage.getPublicationName();
                         String publicationName = "PlosOne";
 
@@ -133,9 +133,9 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         
                         String publicationNameLowerCase = publicationName.toLowerCase();
 
-                        int numDaysInReview = numDaysSinceModified(lastModificationDate.getTime());
+                        int numDaysInReview = numDaysSince(lastModificationDate.getTime());
                         
-                        /**
+
                     
                         if ( (publicationNameLowerCase.contains(pubName)) && (numDaysInReview >= numberOfDays) ) {
                         	// report whether we have a plos notification for the item
@@ -155,7 +155,7 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         	String packageDataReviewURL = packageManuscript.getDataReviewURL();
                         	
                         	boolean notificationReceived = false;
-                        	// Does one or both of these have to be true? - *DF*
+                        	// RYAN, Does one or both of these have to be true? - *DF*
                         	if(packageDataReviewURL != null && !packageDataReviewURL.isEmpty()) {
                         		notificationReceived = true;
                         	}
@@ -166,7 +166,7 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         		report(itemID + ", " + publicationName + ", " + lastModificationDate+ ", " + "N");
                         	}
                         }
-                        **/
+
                     }
                 }
                 
