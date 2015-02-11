@@ -131,6 +131,8 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         String publicationNameLowerCase = publicationName.toLowerCase();
 
                         int numDaysInReview = numDaysSinceModified(lastModificationDate.getTime());
+                        
+                        /**
                     
                         if ( (publicationNameLowerCase.contains(pubName)) && (numDaysInReview >= numberOfDays) ) {
                         	// report whether we have a plos notification for the item
@@ -161,6 +163,7 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         		report(itemID + ", " + publicationName + ", " + lastModificationDate+ ", " + "N");
                         	}
                         }
+                        **/
                     }
                 }
                 
