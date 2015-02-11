@@ -24,8 +24,7 @@ import org.dspace.content.Item;
 import org.dspace.core.Context;
 import org.dspace.core.Constants;
 
-//import org.datadryad.rest.models.Manuscript;
-import org.datadryad.*;
+import org.datadryad.rest.models.Manuscript;
 
 import org.dspace.workflow.WorkflowItem;
 import org.datadryad.api.DryadDataPackage;
@@ -149,8 +148,13 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         	String packageDOI = dataPackage.getIdentifier();
                         	String packageManuscriptNumber = dataPackage.getManuscriptNumber();
                         	
-                        	// get manuscript based on manuscript number; pass in STATUS_SUBMITTED? - *DF*
-                        	Manuscript packageManuscript = new Manuscript(packageManuscriptNumber, STATUS_SUBMITTED);
+                        	// RYAN, Create a manuscript manuscript based on manuscript number; pass in STATUS_SUBMITTED? - *DF*
+                        	// Manuscript dummyManuscript = new Manuscript(TEST_MANUSCRIPT_ID_1, "accepted");
+                        	Manuscript packageManuscript = new Manuscript(packageManuscriptNumber, "submitted");
+                        	
+                        	// Create a manuscript
+        					// Manuscript packageManuscript = new Manuscript();
+					        // packageManuscript.manuscriptId = packageManuscriptNumber;
                         	// getDataReviewURL does not currently exist - *DF*
                         	String packageDataReviewURL = packageManuscript.getDataReviewURL();
                         	
