@@ -95,7 +95,7 @@ public class ItemsInReview extends AbstractCurationTask {
                         int itemID = dataPackage.getItem().getID();
 //                        String publicationName = dataPackage.getPublicationName();
                         Date lastModificationDate = dataPackage.getItem().getLastModified();
-                        report(itemID + ", " + "publicationName" + ", " + lastModificationDate);
+                        report(itemID + ", " + " publicationName " + ", " + lastModificationDate);
                     }
                 }
                 
