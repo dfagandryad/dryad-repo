@@ -24,7 +24,7 @@ import org.dspace.content.Item;
 import org.dspace.core.Context;
 import org.dspace.core.Constants;
 
-import org.datadryad.rest.models.Manuscript;
+import org.datadryad.rest.models.*;
 
 import org.dspace.workflow.WorkflowItem;
 import org.datadryad.api.DryadDataPackage;
