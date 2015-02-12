@@ -129,12 +129,12 @@
        <dependency>
           <groupId>org.dspace</groupId>
           <artifactId>dspace-api</artifactId>
-           <version>1.7.3-SNAPSHOT</version>
        </dependency>
        
         <dependency>
         	<groupId>org.dspace.modules</groupId>
         	<artifactId>dryad-rest-webapp</artifactId>
+           <version>1.7.3-SNAPSHOT</version>
         </dependency>
        
 
