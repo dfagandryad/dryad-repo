@@ -24,7 +24,7 @@ import org.dspace.content.Item;
 import org.dspace.core.Context;
 import org.dspace.core.Constants;
 
-import org.datadryad.rest.models.*;
+import org.datadryad.rest.models.Manuscript;
 
 import org.dspace.workflow.WorkflowItem;
 import org.datadryad.api.DryadDataPackage;
@@ -117,7 +117,8 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         // report on the item
                         int itemID = dataPackage.getItem().getID();
                         
-                        // RYAN, Where is getPublicationName method located???  - *DF*
+                        // RYAN, Where is getPublicationName method located??? Setter is in:  - *DF*
+                        // /dspace/modules/api/src/main/java/org/datadryad/api/DryadDataPackage.java  - *DF*
                         // String publicationName = dataPackage.getPublicationName();
                         String publicationName = "PlosOne";
 
@@ -159,7 +160,7 @@ public class PlosItemsReviewMonth extends AbstractCurationTask {
                         	String packageDataReviewURL = packageManuscript.getDataReviewURL();
                         	
                         	boolean notificationReceived = false;
-                        	// RYAN, Does one or both of these have to be true? - *DF*
+                        	// RYAN, Does this cover what has to be true? - *DF*
                         	if(packageDataReviewURL != null && !packageDataReviewURL.isEmpty()) {
                         		notificationReceived = true;
                         	}
