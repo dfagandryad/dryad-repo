@@ -18,6 +18,7 @@ import org.dspace.app.xmlui.wing.element.Text;
 import org.dspace.app.xmlui.wing.element.Xref;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.*;
+import org.dspace.content.authority.Concept;
 import org.dspace.core.Context;
 import org.dspace.eperson.EPerson;
 import org.dspace.submit.utils.DryadJournalSubmissionUtils;
@@ -89,7 +90,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
 
 
 
-    protected static final String Country_Help_Text= "Submitters requesting a Waiver must be employees of an institution in an eligible country or be independent researchers in residence in an eligible country. Eligible countries are those classified by the World Bank as low-income or lower-middle-income economies.";
+    protected static final String Country_Help_Text= "Submitters requesting a waiver must be employees of an institution in an eligible country or be independent researchers in residence in an eligible country. Eligible countries are those classified by the World Bank as low-income or lower-middle-income economies.";
 
     protected static final String Voucher_Help_Text="Organizations may sponsor submissions to Dryad by purchasing and distributing voucher codes redeemable for one Data Publishing Charge.  Submitters redeeming vouchers may only use them with the permission of the purchaser.";
 
@@ -343,7 +344,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
 
                 }
                 //update the journal and journal subscribtion
-                updateJournal(shoppingcart,journal);
+                updateJournal(context,shoppingcart,journal);
 
             }
         return shoppingcart.getJournalSub();
@@ -370,8 +371,8 @@ public class PaymentSystemImpl implements PaymentSystemService {
         if(journal!=null)
         {
             try{
-                DryadJournalSubmissionUtils util = new DryadJournalSubmissionUtils();
-                Map<String, String> properties = util.journalProperties.get(journal);
+
+                Map<String, String> properties = DryadJournalSubmissionUtils.findJournalProperties(context,journal);
                 if(properties!=null){
                 String subscription = properties.get("integrated");
                 if(subscription==null || !subscription.equals(ShoppingCart.FREE))
@@ -405,7 +406,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
     public boolean hasDiscount(Context context,ShoppingCart shoppingcart,String journal)throws SQLException{
         //this method check all the discount: journal,country,voucher
             Boolean journalSubscription =  getJournalSubscription(context, shoppingcart, journal);
-            Boolean countryDiscount = getCountryWaiver(context,shoppingcart,journal);
+            Boolean countryDiscount = getCountryWaiver(context,shoppingcart);
             Boolean voucherDiscount = voucherValidate(context,shoppingcart);
 
             if(journalSubscription||countryDiscount||voucherDiscount){
@@ -420,7 +421,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
     public int getWaiver(Context context,ShoppingCart shoppingcart,String journal)throws SQLException{
         //this method check all the discount: journal,country,voucher
         Boolean journalSubscription =  getJournalSubscription(context, shoppingcart, journal);
-        Boolean countryDiscount = getCountryWaiver(context,shoppingcart,journal);
+        Boolean countryDiscount = getCountryWaiver(context,shoppingcart);
         Boolean voucherDiscount = voucherValidate(context,shoppingcart);
 
         if(countryDiscount){
@@ -434,7 +435,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
         return ShoppingCart.NO_WAIVER;
     }
     
-    public boolean getCountryWaiver(Context context, ShoppingCart shoppingCart, String journal) throws SQLException{
+    public boolean getCountryWaiver(Context context, ShoppingCart shoppingCart) throws SQLException{
         PaymentSystemConfigurationManager manager = new PaymentSystemConfigurationManager();
         Properties countryArray = manager.getAllCountryProperty();
 
@@ -471,12 +472,12 @@ public class PaymentSystemImpl implements PaymentSystemService {
         return payerName;
     }
 
-    private void updateJournal(ShoppingCart shoppingCart,String journal){
+    private void updateJournal(Context c,ShoppingCart shoppingCart,String journal){
         if(!shoppingCart.getStatus().equals(ShoppingCart.STATUS_COMPLETED))
         {
             if(journal!=null&&journal.length()>0) {
                 //update shoppingcart journal
-                Map<String, String> properties = DryadJournalSubmissionUtils.journalProperties.get(journal);
+                Map<String, String> properties = DryadJournalSubmissionUtils.findJournalProperties(c,journal);
                 Boolean subscription = false;
                 if(properties!=null){
                     if(StringUtils.equals(properties.get("subscriptionPaid"), ShoppingCart.FREE))
@@ -534,7 +535,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
                 Voucher v = Voucher.findById(c, shoppingCart.getVoucher());
                 if(v != null)
                 {
-                    result += format("Voucher Applied", v.getCode());
+                    result += format("Voucher applied", v.getCode());
                 }
             }catch (Exception e)
             {
@@ -660,7 +661,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
 
             countryList.setLabel(T_Country);
             countryList.setHelp(Country_Help_Text);
-            countryList.addOption("","Select Your Country");
+            countryList.addOption("","Select your country");
             for(String temp:countryArray){
                 String[] countryTemp = temp.split(":");
                 if(shoppingCart.getCountry()!=null&&shoppingCart.getCountry().length()>0&&shoppingCart.getCountry().equals(countryTemp[0])) {
@@ -675,7 +676,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
 
         if(shoppingCart.getCountry().length()>0)
         {
-            info.addItem("remove-country","remove-country").addXref("#","Remove Country : "+shoppingCart.getCountry());
+            info.addItem("remove-country","remove-country").addXref("#","Remove country : "+shoppingCart.getCountry());
         }
         else
         {
@@ -739,7 +740,7 @@ public class PaymentSystemImpl implements PaymentSystemService {
         voucher.addButton("apply","apply");
         if(voucher1!=null){
             voucherText.setValue(voucher1.getCode());
-            info.addItem("remove-voucher","remove-voucher").addXref("#", "Remove Voucher : " + voucher1.getCode(), "remove-voucher", "remove-voucher");
+            info.addItem("remove-voucher","remove-voucher").addXref("#", "Remove voucher : " + voucher1.getCode(), "remove-voucher", "remove-voucher");
         }
         else{
             info.addItem("remove-voucher","remove-voucher").addXref("#", "", "remove-voucher", "remove-voucher");
