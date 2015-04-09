@@ -111,8 +111,4 @@ public class ItemsInReview extends AbstractCurationTask {
         return Curator.CURATE_SUCCESS;
     }    
 }
-<<<<<<< HEAD
- 
-=======
     
->>>>>>> upstream/dryad-master
