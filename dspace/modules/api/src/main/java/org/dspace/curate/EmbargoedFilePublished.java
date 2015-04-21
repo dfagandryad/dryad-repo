@@ -61,15 +61,18 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         
     
     /**
-       Perform 
-     **/
+     * Perform - Distributes a task through a DSpace container
+     * 
+     * @param dso
+     * @throws IOException
+     */
     @Override
     public int perform(DSpaceObject dso) throws IOException {
 	try {
         
             if (dso.getType() == Constants.COLLECTION) {
                 // output headers for the CSV file that will be created by processing all items in this collection
-                report("itemID, publicationName, lastModificationDate");
+                report("itemID, publicationName, embargoDate");
 
                 // Iterate over the workflow "collection", calling this perform method on each item.
                 // This bypasses the normal functionality of the curation task system, since items in
@@ -110,4 +113,52 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         
         return Curator.CURATE_SUCCESS;
     }    
+
+
+    /**
+     * Performs task upon an Item. 
+     * 
+     * @param item
+     * @throws SQLException
+     * @throws IOException
+     */
+    protected void performItem(Item item) throws SQLException, IOException
+    {
+	// get embargo type
+	String emType = "none";
+	DCValue[] vals = item.getMetadata("dc.type.embargo");
+	if (vals.length == 0) {
+	    // there is no type set; check if a date was set. If a date is set, the embargo was "oneyear" and was deleted.
+	    DCValue[] emDateVals = item.getMetadata("dc.date.embargoedUntil");
+	    if(emDateVals.length != 0) {
+			String emDate = emDateVals[0].value;
+			if(emDate != null && !emDate.equals("")) {
+		    	emType = "oneyear";
+			}
+	    }
+	} else {
+	    // there is a type set, so use it
+	    emType = vals[0].value;
+	}
+	// clean up the DSpace cache so we don't use excessive memory
+	item.decache();
+    }
+
+
+
+    
+    /** returns true if the date given is after today's date and false if it is not */
+	public static boolean futureDate(String someDate) {
+	
+        boolean future = FALSE;
+
+        if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
+        	after = TRUE;
+        }
+
+        return future;
+	}
+	
+
+
 }
