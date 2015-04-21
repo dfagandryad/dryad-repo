@@ -110,7 +110,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	} else {
 	    // there is a type set, so use it
 	    emType = vals[0].value;
-	    report(itemID + ", " + publicationName + ", " + "emType" + ", " + emDate);
+	    report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 	}
 	
 
