@@ -91,6 +91,10 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     {
 	// get embargo type
 	String emType = "none";
+	String itemID = "none";
+	String publicationName = "none";
+	String lastModificationDate = "none";
+	
 	DCValue[] vals = item.getMetadata("dc.type.embargo");
 	if (vals.length == 0) {
 	    // there is no type set; check if a date was set. If a date is set, the embargo was "oneyear" and was deleted.
