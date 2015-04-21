@@ -153,11 +153,13 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	public static boolean futureDate(String someDate) {
 	
         boolean future = false;
+		try {
+        	if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
+        		future = true;
+        	}
+        } catch (SQLException e) {
 
-        if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
-        	future = true;
         }
-
         return future;
 	}
 	
