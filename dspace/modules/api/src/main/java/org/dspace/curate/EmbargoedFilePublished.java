@@ -95,7 +95,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	String itemID = "itemIDValue";
 	String publicationName = "PubNameValue";
 	
-	
+	report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 	DCValue[] emTypes = item.getMetadata("dc.type.embargo");
 	if (emTypes.length > 0) {
 		emType = emTypes[0].value;
