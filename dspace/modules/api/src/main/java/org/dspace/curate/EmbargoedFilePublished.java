@@ -103,13 +103,13 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			String emDate = emDateVals[0].value;
 			if(emDate != null && !emDate.equals("")) {
 		    	emType = "oneyear";
-		    	report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
+		    	report(itemID + ", " + publicationName + ", " + "one year" + ", " + emDate);
 			}
 	    }
 	} else {
 	    // there is a type set, so use it
 	    emType = vals[0].value;
-	    report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
+	    report(itemID + ", " + publicationName + ", " + "emType" + ", " + emDate);
 	}
 	
 
