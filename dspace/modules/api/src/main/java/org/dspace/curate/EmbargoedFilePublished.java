@@ -71,7 +71,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     @Override
     public int perform(DSpaceObject dso) throws IOException {
 
-        report(itemID + ", " + publicationName + ", " + lastModificationDate);        
+        report("itemID, publicationName, embargoType, embargoDate");     
         distribute(dso);        
         return Curator.CURATE_SUCCESS;
     }    
