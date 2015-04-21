@@ -33,8 +33,8 @@ import org.apache.log4j.Logger;
 
 /**
  * ItemsInReview reports on the status of items in the review workflow.
- * /opt/dryad/bin/dspace curate -v -t embargofilepublished -i 10255/3 -r - >~/temp/embargofilepublished.csv
- * cat ~/temp/embargofilepublished.csv 
+ * /opt/dryad/bin/dspace curate -v -t embargoedfilepublished -i 10255/3 -r - >~/temp/embargoedfilepublished.csv
+ * cat ~/temp/embargoedfilepublished.csv 
  *
  * The task succeeds if it was able to calculate the correct result.
  *
@@ -70,51 +70,14 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
      */
     @Override
     public int perform(DSpaceObject dso) throws IOException {
-	try {
-        
-            if (dso.getType() == Constants.COLLECTION) {
-                // output headers for the CSV file that will be created by processing all items in this collection
-                report("itemID, publicationName, embargoDate");
 
-                // Iterate over the workflow "collection", calling this perform method on each item.
-                // This bypasses the normal functionality of the curation task system, since items in
-                // workflow don't yet belong to a real collection.
-                WorkflowItem[] wfis = WorkflowItem.findAll(context);
-                for(int i = 0; i < wfis.length; i++) {
-                    perform(wfis[i].getItem());
-                }
-
-            } else if (dso.getType() == Constants.ITEM) {
-                // determine whether this item is in the review workflow
-                // workflow stage is stored in taskowner table
-                DryadDataPackage dataPackage = new DryadDataPackage((Item)dso);
-                log.debug("processing " + dataPackage.getItem().getID());
-                WorkflowItem wfi = dataPackage.getWorkflowItem(context);
-                if(wfi != null) {
-                    log.debug(" -- is in workflow");
-                    int workflowID = wfi.getID();
-                    TableRow tr = DatabaseManager.querySingleTable(context,"taskowner", "SELECT * FROM taskowner WHERE workflow_item_id= ?", workflowID);
-                    if(tr != null && tr.getStringColumn("step_id").equals("reviewStep")) {
-                        log.debug(" -- is in review");
-                        // report on the item
-                        int itemID = dataPackage.getItem().getID();
-                        String publicationName = dataPackage.getPublicationName();
-                        Date lastModificationDate = dataPackage.getItem().getLastModified();
-                        report(itemID + ", " + publicationName + ", " + lastModificationDate);
-                    }
-                }
-                
-                // clean up the DSpace cache so we don't use excessive memory
-                ((Item)dso).decache();
-            }
-        } catch (SQLException e) {
-	    log.fatal("Problem with database access", e);
-	} catch (AuthorizeException e) {
-            log.fatal("Problem with authorization", e);
-        }
-        
+        report(itemID + ", " + publicationName + ", " + lastModificationDate);        
+        distribute(dso);        
         return Curator.CURATE_SUCCESS;
     }    
+
+    
+    
 
 
     /**
@@ -142,6 +105,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	    // there is a type set, so use it
 	    emType = vals[0].value;
 	}
+	report(itemID + ", " + publicationName + ", " + lastModificationDate);
 	// clean up the DSpace cache so we don't use excessive memory
 	item.decache();
     }
