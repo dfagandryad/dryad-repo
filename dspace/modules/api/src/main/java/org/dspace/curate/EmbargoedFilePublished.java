@@ -92,7 +92,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	// get embargo type
 	String emType = "none";
 	String itemID = "none";
-	String publicationName = "none";
+	String publicationName = "PubName";
 	String lastModificationDate = "none";
 	
 	DCValue[] vals = item.getMetadata("dc.type.embargo");
@@ -103,13 +103,16 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			String emDate = emDateVals[0].value;
 			if(emDate != null && !emDate.equals("")) {
 		    	emType = "oneyear";
+		    	report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 			}
 	    }
 	} else {
 	    // there is a type set, so use it
 	    emType = vals[0].value;
+	    report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 	}
-	report(itemID + ", " + publicationName + ", " + lastModificationDate);
+	
+
 	// clean up the DSpace cache so we don't use excessive memory
 	item.decache();
     }
