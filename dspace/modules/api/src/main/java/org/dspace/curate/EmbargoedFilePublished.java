@@ -90,17 +90,46 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     protected void performItem(Item item) throws SQLException, IOException
     {
 	// get embargo type
-	String emType = "none";
-	String emDate = "none";
-	String itemID = "none";
-	String publicationName = "PubName";
-	String lastModificationDate = "none";
+	String emType = "emTypeValue";
+	String emDate = "emDateValue";
+	String itemID = "itemIDValue";
+	String publicationName = "PubNameValue";
 	
-	DCValue[] vals = item.getMetadata("dc.type.embargo");
+	
+
+	String emType = null;
+	DCValue[] emTypes = item.getMetadata("dc.type.embargo");
+	if (emTypes.length > 0) {
+		emType = emTypes[0].value;
+
+		if (emType.equals("untilArticleAppears")) {
+			report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
+			String emDate = null;
+			DCValue[] emDates = item.getMetadata("dc.date.embargoedUntil");
+			if (emDates.length == 0) {
+				report("Object has no dc.date.embargoedUntil: " + item.getHandle());
+			} else {
+				emDate = emDates[0].value;
+				if (futureDate (emDate)){
+					String citation = null;
+					DCValue[] citations = item.getMetadata("dc.identifier.citation");
+					if (citations.length > 0) {
+						report("Object has citation but embargoes not lifted: " + item.getHandle());
+	    				return;
+	    			}
+				}			
+			}
+	    }
+	} else {
+	    return;
+	}	
+	
+/*	
+	DCValue[] emTypes = item.getMetadata("dc.type.embargo");
 	if (vals.length == 0) {
 	    // there is no type set; check if a date was set. If a date is set, the embargo was "oneyear" and was deleted.
 	    DCValue[] emDateVals = item.getMetadata("dc.date.embargoedUntil");
-	    if(emDateVals.length != 0) {
+	    if (eTypes.length > 0) {
 			emDate = emDateVals[0].value;
 			if(emDate != null && !emDate.equals("")) {
 		    	emType = "oneyear";
@@ -112,11 +141,22 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	    emType = vals[0].value;
 	    report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 	}
-	
+*/	
 
 	// clean up the DSpace cache so we don't use excessive memory
 	item.decache();
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
