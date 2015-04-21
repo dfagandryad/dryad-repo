@@ -150,16 +150,14 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 
     
     /** returns true if the date given is after today's date and false if it is not */
-	public static boolean futureDate(String someDate) {
+	public boolean futureDate(String someDate) {
 	
         boolean future = false;
-		try {
+
         	if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
         		future = true;
         	}
-        } catch (SQLException e) {
 
-        }
         return future;
 	}
 	
