@@ -96,15 +96,13 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	String publicationName = "PubNameValue";
 	
 	
-
-	String emType = null;
 	DCValue[] emTypes = item.getMetadata("dc.type.embargo");
 	if (emTypes.length > 0) {
 		emType = emTypes[0].value;
 
 		if (emType.equals("untilArticleAppears")) {
 			report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
-			String emDate = null;
+			emDate = null;
 			DCValue[] emDates = item.getMetadata("dc.date.embargoedUntil");
 			if (emDates.length == 0) {
 				report("Object has no dc.date.embargoedUntil: " + item.getHandle());
