@@ -33,13 +33,15 @@ import org.apache.log4j.Logger;
 
 /**
  * ItemsInReview reports on the status of items in the review workflow.
+ * /opt/dryad/bin/dspace curate -v -t embargofilepublished -i 10255/3 -r - >~/temp/embargofilepublished.csv
+ * cat ~/temp/embargofilepublished.csv 
  *
  * The task succeeds if it was able to calculate the correct result.
  *
  * Input: a collection (any collection)
  * Output: a CSV indicating simple information about the data packages that are in review
  *
- * @author Ryan Scherle
+ * @author Debra Fagan
  */
 @Distributive
 public class EmbargoedFilePublished extends AbstractCurationTask {
@@ -153,7 +155,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         boolean future = false;
 
         if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
-        	after = true;
+        	future = true;
         }
 
         return future;
