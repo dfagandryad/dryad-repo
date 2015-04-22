@@ -97,9 +97,10 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 	DCValue[] emTypes = item.getMetadata("dc.type.embargo");
+	
 	if (emTypes.length > 0) {
 		emType = emTypes[0].value;
-
+		report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 		if (emType.equals("untilArticleAppears")) {
 			report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 			emDate = null;
