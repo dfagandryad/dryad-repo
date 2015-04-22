@@ -92,7 +92,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	// get embargo type
 	String emType = "emTypeValue";
 	String emDate = "emDateValue";
-	// String itemID = "itemIDValue";
+	String itemID = "itemIDValue";
 	String publicationName = "PubNameValue";
 	//int itemID = dataPackage.getItem().getID();
 	report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
