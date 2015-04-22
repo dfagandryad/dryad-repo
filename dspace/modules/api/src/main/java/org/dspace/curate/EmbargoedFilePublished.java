@@ -94,19 +94,24 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	String emDate = "emDateValue";
 	String itemID = "itemIDValue";
 	String publicationName = "PubNameValue";
+	String itemDOI = "itemDOIValue";
 	//int itemID = dataPackage.getItem().getID();
 	report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 	DCValue[] emTypes = item.getMetadata("dc.type.embargo");
 	DCValue[] emDates = item.getMetadata("dc.date.embargoedUntil");
+	DCValue[] itemDOIs = item.getMetadata("dc.identifier");
 	int theLength = emTypes.length;
 	int theLength2 = emDates.length;
 	String emTypesLength = Integer.toString(theLength);
 	String emDatesLength = Integer.toString(theLength2);
-
+	if (emTypes.length > 0) {
+		itemDOI = itemDOIs[0].value;
+	}
+	
 	report("emTypes Length = " + emTypesLength + "     embargoedUntil Length = " + emDatesLength);
 	if (emTypes.length > 0) {
 		emType = emTypes[0].value;
-		report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
+		report(itemDOI + ", " + publicationName + ", " + emType + ", " + emDate);
 		if (emType.equals("untilArticleAppears")) {
 			report(itemID + ", " + publicationName + ", " + emType + ", " + emDate);
 			emDate = null;
