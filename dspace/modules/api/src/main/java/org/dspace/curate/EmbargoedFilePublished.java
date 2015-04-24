@@ -49,12 +49,6 @@ import org.dspace.identifier.IdentifierNotFoundException;
 import org.dspace.identifier.IdentifierNotResolvableException;
 import org.dspace.utils.DSpace;
 
-import java.util.Date;
-import java.text.DateFormat;
-import java.util.Locale;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -68,8 +62,9 @@ import org.apache.log4j.Logger;
  * Output: a CSV indicating simple information about the data packages that are in review
  *
  * @author Debra Fagan
+ public class EmbargoedFilePublished
  */
-@Distributive
+@Suspendable
 public class EmbargoedFilePublished extends AbstractCurationTask {
 
     private static Logger log = Logger.getLogger(DataPackageStats.class);
@@ -412,3 +407,4 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     }
     
 }
+
