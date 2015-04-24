@@ -49,6 +49,11 @@ import org.dspace.identifier.IdentifierNotFoundException;
 import org.dspace.identifier.IdentifierNotResolvableException;
 import org.dspace.utils.DSpace;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
+
 import org.apache.log4j.Logger;
 
 /**
