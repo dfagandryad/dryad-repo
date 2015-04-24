@@ -112,6 +112,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	String articleCitation = "\"[no article citation found]\"";
 	boolean articleCitationFound = false;
 	boolean reportItem = false;
+	boolean futureEmbargoDate = false;
 	String embargoType = "none";
 	String embargoDate = "";
 
@@ -204,7 +205,10 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			vals = fileItem.getMetadata("dc.date.embargoedUntil");
 			if (vals.length > 0) {
 			    embargoDate = vals[0].value;
+				futureEmbargoDate = futureDate(embargoDate);
 			}			
+			
+			
 
 			//	}
 			// if((embargoType == null || embargoType.equals("") || embargoType.equals("none")) &&
@@ -212,7 +216,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
 			//     embargoType = "oneyear";
 			// }			
-			boolean futureEmbargoDate = true;
+
 			if((embargoType.equals("untilArticleAppears"))) {
 			    if( ((embargoDate == null) || (embargoDate.equals(""))) && (futureEmbargoDate) ) {
 			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
@@ -245,6 +249,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 /*
 	setResult("Last processed item = " -- " + packageDOI);
 */
+	reportItem = true;
 	if (reportItem) {
 	report(packageDOI + ", " + articleDOI + "\", " +
 	       embargoType + ", " + embargoDate);
