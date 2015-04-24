@@ -217,7 +217,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         
 /*
 	setResult("Last processed item = " -- " + packageDOI);
-/*
+*/
 	report(packageDOI + ", " + articleDOI + "\", " +
 	       embargoType + ", " + embargoDate);
 
