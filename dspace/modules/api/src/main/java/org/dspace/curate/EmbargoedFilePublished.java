@@ -109,6 +109,9 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	String handle = "\"[no handle found]\"";
 	String packageDOI = "\"[no package DOI found]\"";
 	String articleDOI = "\"[no article DOI found]\"";
+	String articleCitation = "\"[no article citation found]\"";
+	boolean articleCitationFound = false;
+	boolean reportItem = false;
 	String embargoType = "none";
 	String embargoDate = "";
 
@@ -154,6 +157,15 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		}
 		log.debug("articleDOI = " + articleDOI);
 
+		// article citation
+		vals = item.getMetadata("dc.identifier.citation");
+		if (vals.length == 0) {
+		    log.debug("Object has no citation (dc.identifier.citation) " + handle);
+		} else {
+		    articleCitation = vals[0].value;
+		    articleCitationFound = true;
+		}
+		log.debug("articleDOI = " + articleDOI);
 
 		
 		// count the files, and compute statistics that depend on the files
@@ -192,11 +204,20 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			vals = fileItem.getMetadata("dc.date.embargoedUntil");
 			if (vals.length > 0) {
 			    embargoDate = vals[0].value;
+			}			
+
+			//	}
+			// if((embargoType == null || embargoType.equals("") || embargoType.equals("none")) &&
+			//   (embargoDate != null && !embargoDate.equals(""))) {
+			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
+			//     embargoType = "oneyear";
+			// }			
+			boolean futureEmbargoDate = true;
+			if((embargoType.equals("untilArticleAppears"))) {
+			    if( ((embargoDate == null) || (embargoDate.equals(""))) && (futureEmbargoDate) ) {
+			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
+			    reportItem = true;
 			}
-			if((embargoType == null || embargoType.equals("") || embargoType.equals("none")) &&
-			   (embargoDate != null && !embargoDate.equals(""))) {
-			    // correctly encode embago type to "oneyear" if there is a date set, but the type is blank or none
-			    embargoType = "oneyear";
 			}
 			log.debug("embargoType = " + embargoType);
 			log.debug("embargoDate = " + embargoDate);
@@ -224,8 +245,10 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 /*
 	setResult("Last processed item = " -- " + packageDOI);
 */
+	if (reportItem) {
 	report(packageDOI + ", " + articleDOI + "\", " +
 	       embargoType + ", " + embargoDate);
+	}
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	// try {
