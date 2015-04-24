@@ -72,7 +72,6 @@ import org.apache.log4j.Logger;
 @Distributive
 public class EmbargoedFilePublished extends AbstractCurationTask {
 
-
     private static Logger log = Logger.getLogger(DataPackageStats.class);
     private IdentifierService identifierService = null;
     DocumentBuilderFactory dbf = null;
@@ -411,36 +410,5 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 
 	return dspaceItem;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
     
-    /** returns true if the date given is after today's date and false if it is not */
-	public boolean futureDate(String someDate) {
-	
-        boolean future = false;
-        
-      	try {
-        	if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
-        		future = true;
-        	}
-      	} catch (ParseException e) {}
-
-        return future;
-	}
-	
-
-
 }
-
-
