@@ -218,9 +218,12 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			// }			
 
 			if((embargoType.equals("untilArticleAppears"))) {
-			    if( ((embargoDate == null) || (embargoDate.equals(""))) && (futureEmbargoDate) ) {
-			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
+			    if( !((embargoDate == null) || (embargoDate.equals(""))) && (futureEmbargoDate) ) {
 			    reportItem = true;
+			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
+			    if (articleCitationFound) {
+			    	reportItem = true;
+			    }
 			}
 			}
 			log.debug("embargoType = " + embargoType);
@@ -249,7 +252,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 /*
 	setResult("Last processed item = " -- " + packageDOI);
 */
-	reportItem = true;
+	//reportItem = true;
 	if (reportItem) {
 	report(packageDOI + ", " + articleDOI + "\", " +
 	       embargoType + ", " + embargoDate);
@@ -301,12 +304,14 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
         boolean future = false;
 
-      	try {
-        	if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
-        		future = true;
-        	}
-      	} catch (ParseException e) {}
-
+      	if ((someDate != null) && (someDate != "")) {
+      		try {
+        		if (new SimpleDateFormat("yyyy-MM-dd").parse(someDate).after(new Date())) {
+        			future = true;
+        		}
+      		} catch (ParseException e) {}
+		} 
+		
         return future;
 	} 
     
