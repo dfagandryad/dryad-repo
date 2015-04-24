@@ -73,9 +73,6 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     DocumentBuilder docb = null;
     static long total = 0;
     private Context context;
-//    private static List<String> journalsThatAllowReview = new ArrayList<String>();
-//    private static List<String> integratedJournals = new ArrayList<String>();
-//    private static List<String> integratedJournalsThatAllowEmbargo = new ArrayList<String>();
     
     @Override 
     public void init(Curator curator, String taskId) throws IOException {
@@ -100,22 +97,14 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
      */
     @Override
     public int perform(DSpaceObject dso) throws IOException {
-	log.info("performing DataPackageStats task " + total++ );
+	log.info("performing EmbargoedFilePublished task " + total++ );
 	
-	String handle = "\"[no handle found]\"";
 	String packageDOI = "\"[no package DOI found]\"";
 	String articleDOI = "\"[no article DOI found]\"";
-	String journal = "[no journal found]"; // don't add quotes here, because journal is always quoted when output below
-	boolean journalAllowsEmbargo = false;
-	boolean journalAllowsReview = false;
 	String numKeywords = "\"[no numKeywords found]\"";
 	long packageSize = 0;
 	String embargoType = "none";
 	String embargoDate = "";
-	int maxDownloads = 0;
-	String manuscriptNum = null;
-	int numReadmes = 0;
-	String dateAccessioned = "\"[unknown]\"";
 
 	
 	try {
@@ -127,8 +116,8 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("packageDOI, articleDOI, journal, journalAllowsEmbargo, packageSize, " +
-		   "embargoType, embargoDate, manuscriptNum, numReadmes");
+	    report("packageDOI, articleDOI, packageSize, " +
+		   "embargoType, embargoDate");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -159,46 +148,6 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		}
 		log.debug("articleDOI = " + articleDOI);
 
-		
-		// journal
-	 	vals = item.getMetadata("prism.publicationName");
-		if (vals.length == 0) {
-		    setResult("Object has no prism.publicationName available " + handle);
-		    log.error("Skipping -- Object has no prism.publicationName available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    journal = vals[0].value;
-		}
-		log.debug("journal = " + journal);
-
-		// journalAllowsEmbargo
-		// embargoes are allowed for all non-integrated journals
-		// embargoes are also allowed for integrated journals that have set the embargoesAllowed option
-        //use new journal utils to read the configuration from database instead of from the file
-        Scheme journalScheme = Scheme.findByIdentifier(context,"Journal");
-        Concept[] journalConcept = Concept.findByPreferredLabel(context,journal,journalScheme.getID());
-
-
-
-		if(journalConcept!=null&&journalConcept.length>0) {
-            if(JournalUtils.getBooleanIntegrated(journalConcept[0])|| JournalUtils.getBooleanEmbargoAllowed(journalConcept[0])) {
-		        journalAllowsEmbargo = true;
-            }
-		} 
-
-				
-		// manuscript number
-		DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
-		manuscriptNum = null;
-		if(manuvals.length > 0) {
-		    manuscriptNum = manuvals[0].value;
-		}
-		if(manuscriptNum != null && manuscriptNum.trim().length() > 0) {
-		    log.debug("has a real manuscriptNum = " + manuscriptNum);
-
-		}
-
 
 		
 		// count the files, and compute statistics that depend on the files
@@ -226,34 +175,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			    break;
 			}
 			log.debug("file internalID = " + fileItem.getID());
-			
-			// total package size
-			// add total size of the bitstreams in this data file 
-			// to the cumulative total for the package
-			// (includes metadata, readme, and textual conversions for indexing)
-			for (Bundle bn : fileItem.getBundles()) {
-			    for (Bitstream bs : bn.getBitstreams()) {
-				packageSize = packageSize + bs.getSize();
-			    }
-			}
-			log.debug("total package size (as of file " + fileID + ") = " + packageSize);
 
-			// Readmes
-			// Check for at least one readme bitstream. There may be more, due to indexing and cases
-			// where the file itself is named readme. We only count one readme per datafile.
-			boolean readmeFound = false;
-			for (Bundle bn : fileItem.getBundles()) {
-			    for (Bitstream bs : bn.getBitstreams()) {
-				String name = bs.getName().trim().toLowerCase();
-				if(name.startsWith("readme")) {
-				    readmeFound = true;
-				}
-			    }
-			}
-			if(readmeFound) {
-			    numReadmes++;
-			}
-			log.debug("total readmes (as of file " + fileID + ") = " + numReadmes);
 
 			
 			// embargo setting (of last file processed)
@@ -294,10 +216,8 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         }
 
 	setResult("Last processed item = " -- " + packageDOI);
-	report(handle + ", " + packageDOI + ", " + articleDOI + ", \"" + journal + "\", " +
-	       journalAllowsEmbargo + ", " + packageSize + ", " +
-	       embargoType + ", " + embargoDate + ", " + manuscriptNum + ", " +
-	       numReadmes);
+	report(packageDOI + ", " + articleDOI + "\", " +
+	       embargoType + ", " + embargoDate);
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	try {
