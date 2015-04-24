@@ -154,16 +154,9 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		// alternate title
 		vals = item.getMetadata("dc.title.alternative");
 		if (vals.length == 0) {
-		    setResult("Object has no dc.title.alternative available " + handle);
-		    log.error("Skipping -- no dc.title.alternative available for " + handle);
-		    context.abort(); 
-		    return Curator.CURATE_SKIP;
+		    log.debug("Object has no citation (dc.title.alternative) " + handle);
 		} else {
-		    for(int i = 0; i < vals.length; i++) {
-			if (vals[i].value.startsWith("doi:")) {
-			    altTitle = vals[i].value;
-			}
-		    }
+		    altTitle = vals[0].value;
 		}
 		log.debug("altTitle = " + altTitle);		
 		
