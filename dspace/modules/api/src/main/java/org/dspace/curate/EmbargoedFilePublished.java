@@ -109,16 +109,12 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	boolean journalAllowsEmbargo = false;
 	boolean journalAllowsReview = false;
 	String numKeywords = "\"[no numKeywords found]\"";
-	String numKeywordsJournal = "\"[unknown]\"";
-	String numberOfFiles = "\"[no numberOfFiles found]\"";
 	long packageSize = 0;
 	String embargoType = "none";
 	String embargoDate = "";
 	int maxDownloads = 0;
-	String numberOfDownloads = "\"[unknown]\"";
 	String manuscriptNum = null;
 	int numReadmes = 0;
-	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
 
 	
@@ -131,19 +127,12 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, numKeywords, numKeywordsJournal, numberOfFiles, packageSize, " +
-		   "embargoType, embargoDate, numberOfDownloads, manuscriptNum, numReadmes, wentThroughReview, dateAccessioned");
+	    report("packageDOI, articleDOI, journal, journalAllowsEmbargo, packageSize, " +
+		   "embargoType, embargoDate, manuscriptNum, numReadmes");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
 	    try {
-		handle = item.getHandle();
-		log.info("handle = " + handle);
-		
-		if (handle == null) {
-		    // this item is still in workflow - no handle assigned
-		    handle = "in workflow";
-		}
 		
 		// package DOI
 		DCValue[] vals = item.getMetadata("dc.identifier");
@@ -198,46 +187,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
             }
 		} 
 
-		// journalAllowsReview
-		if(journalConcept!=null&&journalConcept.length>0&&JournalUtils.getBooleanAllowReviewWorkflow(journalConcept[0])) {
-		    journalAllowsReview = true;
-		}
 				
-		// accession date
-		vals = item.getMetadata("dc.date.accessioned");
-		if (vals.length == 0) {
-		    setResult("Object has no dc.date.accessioned available " + handle);
-		    log.error("Skipping -- Object has no dc.date.accessioned available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    dateAccessioned = vals[0].value;
-		}
-		log.debug("dateAccessioned = " + dateAccessioned);
-
-		// wentThroughReview
-		vals = item.getMetadata("dc.description.provenance");
-		if (vals.length == 0) {
-		    log.warn("That's strange -- Object has no provenance data available " + handle);
-		} else {
-		    for(DCValue aVal : vals) {
-			if(aVal.value != null && aVal.value.contains("requiresReviewStep")) {
-			    wentThroughReview = true;
-			}
-		    }
-		}
-		log.debug("wentThroughReview = " + wentThroughReview);
-
-		
-		// number of keywords
-		int intNumKeywords = item.getMetadata("dc.subject").length +
-		    item.getMetadata("dwc.ScientificName").length +
-		    item.getMetadata("dc.coverage.temporal").length +
-		    item.getMetadata("dc.coverage.spatial").length;
-
-		numKeywords = "" + intNumKeywords; //convert integer to string by appending
-		log.debug("numKeywords = " + numKeywords);
-
 		// manuscript number
 		DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
 		manuscriptNum = null;
@@ -260,7 +210,6 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		    context.abort();
 		    return Curator.CURATE_SKIP;
 		} else {
-		    numberOfFiles = "" + dataFiles.length;
 		    packageSize = 0;
 		    
 		    // for each data file in the package
@@ -324,25 +273,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			}
 			log.debug("embargoType = " + embargoType);
 			log.debug("embargoDate = " + embargoDate);
-			
-		       			    			
-			// number of downlaods for most downloaded file
-			// must use the DSpace item ID, since the solr stats system is based on this ID
-			// The SOLR address is hardcoded to the production system here, because even when we run on test servers,
-			// it's easiest to use the real stats --the test servers typically don't have useful stats available
-			URL downloadStatURL = new URL("http://datadryad.org/solr/statistics/select/?indent=on&q=owningItem:" + fileItem.getID());
-			log.debug("fetching " + downloadStatURL);
-			Document statsdoc = docb.parse(downloadStatURL.openStream());
-			NodeList nl = statsdoc.getElementsByTagName("result");
-			String downloadsAtt = nl.item(0).getAttributes().getNamedItem("numFound").getTextContent();
-			int currDownloads = Integer.parseInt(downloadsAtt);
-			if(currDownloads > maxDownloads) {
-			    maxDownloads = currDownloads;
-			    // rather than converting maxDownloads back to a string, just use the string we parsed above
-			    numberOfDownloads = downloadsAtt;
-			}
-			log.debug("max downloads (as of file " + fileID + ") = " + numberOfDownloads);
-			
+
 		    }
 
 		}
@@ -362,12 +293,11 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	    return Curator.CURATE_SKIP;
         }
 
-	setResult("Last processed item = " + handle + " -- " + packageDOI);
+	setResult("Last processed item = " -- " + packageDOI);
 	report(handle + ", " + packageDOI + ", " + articleDOI + ", \"" + journal + "\", " +
-	       journalAllowsEmbargo + ", " + journalAllowsReview + ", " + numKeywords + ", " +
-	       numKeywordsJournal + ", " + numberOfFiles + ", " + packageSize + ", " +
-	       embargoType + ", " + embargoDate + ", " + numberOfDownloads + ", " + manuscriptNum + ", " +
-	       numReadmes + ", " + wentThroughReview + ", " + dateAccessioned);
+	       journalAllowsEmbargo + ", " + packageSize + ", " +
+	       embargoType + ", " + embargoDate + ", " + manuscriptNum + ", " +
+	       numReadmes);
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	try {
@@ -376,7 +306,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	    // ignore it
 	}
 
-	log.debug("DataPackageStats complete");
+	log.debug("EmbargoedFilePublished complete");
 
 	try { 
 	    context.complete();
