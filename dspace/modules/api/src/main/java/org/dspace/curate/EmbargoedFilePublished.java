@@ -214,8 +214,8 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	    context.abort();
 	    return Curator.CURATE_SKIP;
         }
-
-	setResult("Last processed item = " -- " + packageDOI);
+//Debra
+	//setResult("Last processed item = " -- " + packageDOI);
 	report(packageDOI + ", " + articleDOI + "\", " +
 	       embargoType + ", " + embargoDate);
 
