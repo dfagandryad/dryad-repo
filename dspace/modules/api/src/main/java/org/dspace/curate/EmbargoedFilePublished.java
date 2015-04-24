@@ -115,6 +115,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	boolean futureEmbargoDate = false;
 	String embargoType = "none";
 	String embargoDate = "";
+	String altTitle = "\"[no altTitle found]\"";
 
 	
 	try {
@@ -126,8 +127,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("packageDOI, articleDOI, " +
-		   "embargoType, embargoDate");
+	    report("packageDOI, articleDOI, altTitle, embargoType, embargoDate");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -148,6 +148,25 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		    }
 		}
 		log.debug("packageDOI = " + packageDOI);
+		
+		
+		
+		// alternate title
+		DCValue[] vals = item.getMetadata("dc.identifier");
+		if (vals.length == 0) {
+		    setResult("Object has no dc.identifier available " + handle);
+		    log.error("Skipping -- no dc.identifier available for " + handle);
+		    context.abort(); 
+		    return Curator.CURATE_SKIP;
+		} else {
+		    for(int i = 0; i < vals.length; i++) {
+			if (vals[i].value.startsWith("doi:")) {
+			    altTitle = vals[i].value;
+			}
+		    }
+		}
+		log.debug("altTitle = " + altTitle);		
+		
 
 		// article DOI
 		vals = item.getMetadata("dc.relation.isreferencedby");
@@ -254,8 +273,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 */
 	//reportItem = true;
 	if (reportItem) {
-	report(packageDOI + ", " + articleDOI + "\", " +
-	       embargoType + ", " + embargoDate);
+	report(packageDOI + ", " + articleDOI + "," + altTitle + ", " + embargoType + ", " + embargoDate);
 	}
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
