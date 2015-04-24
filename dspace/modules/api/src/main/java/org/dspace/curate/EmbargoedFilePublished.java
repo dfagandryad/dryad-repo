@@ -152,10 +152,10 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		
 		
 		// alternate title
-		DCValue[] vals = item.getMetadata("dc.identifier");
+		vals = item.getMetadata("dc.title.alternative");
 		if (vals.length == 0) {
-		    setResult("Object has no dc.identifier available " + handle);
-		    log.error("Skipping -- no dc.identifier available for " + handle);
+		    setResult("Object has no dc.title.alternative available " + handle);
+		    log.error("Skipping -- no dc.title.alternative available for " + handle);
 		    context.abort(); 
 		    return Curator.CURATE_SKIP;
 		} else {
