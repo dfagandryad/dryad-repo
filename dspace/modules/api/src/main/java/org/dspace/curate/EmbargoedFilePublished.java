@@ -49,6 +49,8 @@ import org.dspace.identifier.IdentifierNotFoundException;
 import org.dspace.identifier.IdentifierNotResolvableException;
 import org.dspace.utils.DSpace;
 
+import org.apache.log4j.Logger;
+
 /**
  * ItemsInReview reports on the status of items in the review workflow.
  * /opt/dryad/bin/dspace curate -v -t embargoedfilepublished -i 10255/3 -r - >~/temp/embargoedfilepublished.csv
