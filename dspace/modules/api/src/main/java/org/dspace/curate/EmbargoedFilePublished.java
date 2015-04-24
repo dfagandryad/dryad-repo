@@ -74,6 +74,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     static long total = 0;
     private Context context;
     
+    
     @Override 
     public void init(Curator curator, String taskId) throws IOException {
         super.init(curator, taskId);
@@ -99,10 +100,9 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     public int perform(DSpaceObject dso) throws IOException {
 	log.info("performing EmbargoedFilePublished task " + total++ );
 	
+	String handle = "\"[no handle found]\"";
 	String packageDOI = "\"[no package DOI found]\"";
 	String articleDOI = "\"[no article DOI found]\"";
-	String numKeywords = "\"[no numKeywords found]\"";
-	long packageSize = 0;
 	String embargoType = "none";
 	String embargoDate = "";
 
@@ -116,7 +116,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("packageDOI, articleDOI, packageSize, " +
+	    report("packageDOI, articleDOI, " +
 		   "embargoType, embargoDate");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
@@ -159,8 +159,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		    context.abort();
 		    return Curator.CURATE_SKIP;
 		} else {
-		    packageSize = 0;
-		    
+				    
 		    // for each data file in the package
 
 		    for(int i = 0; i < dataFiles.length; i++) {
@@ -214,9 +213,8 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	    context.abort();
 	    return Curator.CURATE_SKIP;
         }
-        
-        
-        
+
+	setResult("Last processed item = " -- " + packageDOI);
 	report(packageDOI + ", " + articleDOI + "\", " +
 	       embargoType + ", " + embargoDate);
 
