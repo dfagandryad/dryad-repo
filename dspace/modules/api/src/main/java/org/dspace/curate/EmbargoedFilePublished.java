@@ -231,7 +231,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 
 			if((embargoType.equals("untilArticleAppears"))) {
 			    if( !((embargoDate == null) || (embargoDate.equals(""))) && (futureEmbargoDate) ) {
-			    reportItem = true;
+			    //reportItem = true;
 			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
 			    if (articleCitationFound) {
 			    	reportItem = true;
