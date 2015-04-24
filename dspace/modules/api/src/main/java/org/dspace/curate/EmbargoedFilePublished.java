@@ -274,7 +274,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			log.debug("embargoType = " + embargoType);
 			log.debug("embargoDate = " + embargoDate);
 
-//		    }
+		    }
 
 		}
 		log.info(handle + " done.");
