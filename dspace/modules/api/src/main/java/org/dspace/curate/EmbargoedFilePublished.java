@@ -58,8 +58,15 @@ import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
 
 /**
- * ItemsInReview reports on the status of items in the review workflow.
+ * EmbargoedFilePublished reports items that have a citation in the 
+ * metadata (dc.identifier.citation) yet still have an embargo in place
+ * with a future embargo release date.
+ *
+ * EmbargoedFilePublished can be run from the command line as follows (please note that 
+ * an output file with the name embargoedfilepublished.csv will be written to 
+ * a temp directory that must already exist):
  * /opt/dryad/bin/dspace curate -v -t embargoedfilepublished -i 10255/3 -r - >~/temp/embargoedfilepublished.csv
+ * To view the output file:
  * cat ~/temp/embargoedfilepublished.csv 
  *
  * The task succeeds if it was able to calculate the correct result.
@@ -151,7 +158,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		
 		
 		
-		// alternate title
+		// alternate title - used for testing only!!!
 		vals = item.getMetadata("dc.title.alternative");
 		if (vals.length == 0) {
 		    log.debug("Object has no citation (dc.title.alternative) " + handle);
@@ -169,6 +176,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		    articleDOI = vals[0].value;
 		}
 		log.debug("articleDOI = " + articleDOI);
+		
 
 		// article citation
 		vals = item.getMetadata("dc.identifier.citation");
@@ -181,7 +189,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		log.debug("articleDOI = " + articleDOI);
 
 		
-		// count the files, and compute statistics that depend on the files
+		// process data files in packages
 		log.debug("getting data file info");
 		DCValue[] dataFiles = item.getMetadata("dc.relation.haspart");
 		if (dataFiles.length == 0) {
@@ -206,7 +214,6 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			}
 			log.debug("file internalID = " + fileItem.getID());
 
-
 			
 			// embargo setting (of last file processed)
 			vals = fileItem.getMetadata("dc.type.embargo");
@@ -220,23 +227,15 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 				futureEmbargoDate = futureDate(embargoDate);
 			}			
 			
-			
-
-			//	}
-			// if((embargoType == null || embargoType.equals("") || embargoType.equals("none")) &&
-			//   (embargoDate != null && !embargoDate.equals(""))) {
-			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
-			//     embargoType = "oneyear";
-			// }			
+		
 
 			if((embargoType.equals("untilArticleAppears"))) {
-			    if (   ((embargoDate == null) || (embargoDate.equals(""))) ||  ((embargoDate != null) && (!(embargoDate.equals(""))) && (futureEmbargoDate) )  ){
-			    //reportItem = true;
-			    // correctly encode embargo type to "oneyear" if there is a date set, but the type is blank or none
-			    if (articleCitationFound) {
-			    	reportItem = true;
-			    }
-			}
+			    if (((embargoDate == null) || (embargoDate.equals(""))) || ((embargoDate != null) && (!(embargoDate.equals(""))) && (futureEmbargoDate))){
+
+			    	if (articleCitationFound) {
+			    		reportItem = true;
+			    	}
+				}
 			}
 			log.debug("embargoType = " + embargoType);
 			log.debug("embargoDate = " + embargoDate);
@@ -260,21 +259,11 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	    return Curator.CURATE_SKIP;
         }
         
-        
-/*
-	setResult("Last processed item = " -- " + packageDOI);
-*/
-	//reportItem = true;
 	if (reportItem) {
-	report(packageDOI + ", " + articleDOI + "," + altTitle + ", " + embargoType + ", " + embargoDate);
+		report(packageDOI + ", " + articleDOI + "," + altTitle + ", " + embargoType + ", " + embargoDate);
 	}
 
-	// slow this down a bit so we don't overwhelm the production SOLR server with requests
-	// try {
-	//     Thread.sleep(20);
-	// } catch(InterruptedException e) {
-	    // ignore it
-	// }
+
 
 	log.debug("EmbargoedFilePublished complete");
 
@@ -286,28 +275,6 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	return Curator.CURATE_SUCCESS;
     }
 
-    /**
-       An XML utility method that returns the text content of a node.
-    **/
-    private String getNodeText(Node aNode) {
-	return aNode.getChildNodes().item(0).getNodeValue();
-    }
-
-    private Item getDSpaceItem(String itemID) {
-	Item dspaceItem = null;
-	try {
-	    dspaceItem = (Item)identifierService.resolve(context, itemID);  
-        } catch (IdentifierNotFoundException e) {
-	    log.fatal("Unable to get DSpace Item for " + itemID, e);
-	} catch (IdentifierNotResolvableException e) {
-	    log.fatal("Unable to get DSpace Item for " + itemID, e);
-	}
-
-	return dspaceItem;
-    }
-    
-    
-    
 
     
     /** returns true if the date given is after today's date and false if it is not */
