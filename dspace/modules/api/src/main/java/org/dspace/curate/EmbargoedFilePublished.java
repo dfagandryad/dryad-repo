@@ -134,7 +134,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("packageDOI, articleDOI, embargoType, embargoDate");
+	    report("packageDOI,articleDOI,embargoType,embargoDate");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -246,7 +246,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         }
         
 	if (reportItem) {
-		report(packageDOI + ", " + articleDOI + "," + embargoType + ", " + embargoDate);
+		report(packageDOI + "," + articleDOI + "," + embargoType + "," + embargoDate);
 	}
 
 	log.debug("EmbargoedFilePublished complete");
