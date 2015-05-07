@@ -119,7 +119,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	String handle = "\"[no handle found]\"";
 	String packageDOI = "\"[no package DOI found]\"";
-	String articleDOI = "\"[no article DOI found]\"";
+	String embargoedFileTitle = "\"[no embargoed file title found]\"";
 	String articleCitation = "\"[no article citation found]\"";
 	boolean articleCitationFound = false;
 	boolean reportItem = false;
@@ -137,7 +137,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("packageDOI,articleDOI,embargoType,embargoDate");
+	    report("packageDOI,embargoedFileTitle,embargoType,embargoDate");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -178,7 +178,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		    articleCitation = vals[0].value;
 		    articleCitationFound = true;
 		}
-		log.debug("articleDOI = " + articleDOI);
+		log.debug("articleCitation = " + articleCitation);
 
 		
 		// process data files in packages
@@ -205,12 +205,20 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			    break;
 			}
 			log.debug("file internalID = " + fileItem.getID());
+			
+			// file title (of last file processed)
+			vals = fileItem.getMetadata("dc.title");
+			if (vals.length > 0) {
+			    embargoedFileTitle = vals[0].value;
+			    log.debug("File title: " + vals.length + " type " + embargoedFileTitle);
+			}
+
 
 			// embargo setting (of last file processed)
 			vals = fileItem.getMetadata("dc.type.embargo");
 			if (vals.length > 0) {
 			    embargoType = vals[0].value;
-			    log.debug("EMBARGO vals " + vals.length + " type " + embargoType);
+			    log.debug("Embargo type: " + vals.length + " type " + embargoType);
 			}
 			vals = fileItem.getMetadata("dc.date.embargoedUntil");
 			if (vals.length > 0) {
@@ -249,7 +257,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         }
         
 	if (reportItem) {
-		report(packageDOI + "," + articleDOI + "," + embargoType + "," + embargoDate);
+		report(packageDOI + "," + embargoedFileTitle + "," + embargoType + "," + embargoDate);
 	}
 
 	log.debug("EmbargoedFilePublished complete");
