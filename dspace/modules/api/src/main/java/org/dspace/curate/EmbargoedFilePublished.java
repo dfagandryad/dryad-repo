@@ -158,16 +158,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 		    }
 		}
 		log.debug("packageDOI = " + packageDOI);		
-		
 
-		// article DOI
-		vals = item.getMetadata("dc.relation.isreferencedby");
-		if (vals.length == 0) {
-		    log.debug("Object has no articleDOI (dc.relation.isreferencedby) " + handle);
-		} else {
-		    articleDOI = vals[0].value;
-		}
-		log.debug("articleDOI = " + articleDOI);
 		
 
 		// article citation
