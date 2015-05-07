@@ -75,7 +75,7 @@ import org.apache.log4j.Logger;
  * Output: a CSV indicating simple information about the data packages that are in review
  *
  * @author Debra Fagan
- public class EmbargoedFilePublished
+ * public class EmbargoedFilePublished
  */
 @Suspendable
 public class EmbargoedFilePublished extends AbstractCurationTask {
@@ -87,20 +87,21 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
     static long total = 0;
     private Context context;
     
-    
+
     @Override 
     public void init(Curator curator, String taskId) throws IOException {
-        super.init(curator, taskId);
+    
+    	super.init(curator, taskId);
 	
-        identifierService = new DSpace().getSingletonService(IdentifierService.class);            
+		identifierService = new DSpace().getSingletonService(IdentifierService.class);            
 	
-	// init xml processing
-	try {
-	    dbf = DocumentBuilderFactory.newInstance();
-	    docb = dbf.newDocumentBuilder();
-	} catch (ParserConfigurationException e) {
-	    throw new IOException("unable to initiate xml processor", e);
-	}
+		// init xml processing
+		try {
+	    	dbf = DocumentBuilderFactory.newInstance();
+	    	docb = dbf.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+	  	  throw new IOException("unable to initiate xml processor", e);
+		}
     }
     
     /**
@@ -122,7 +123,6 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	boolean futureEmbargoDate = false;
 	String embargoType = "none";
 	String embargoDate = "";
-	String altTitle = "\"[no altTitle found]\"";
 
 	
 	try {
@@ -134,7 +134,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("packageDOI, articleDOI, altTitle, embargoType, embargoDate");
+	    report("packageDOI, articleDOI, embargoType, embargoDate");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -154,18 +154,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			}
 		    }
 		}
-		log.debug("packageDOI = " + packageDOI);
-		
-		
-		
-		// alternate title - used for testing only!!!
-		vals = item.getMetadata("dc.title.alternative");
-		if (vals.length == 0) {
-		    log.debug("Object has no citation (dc.title.alternative) " + handle);
-		} else {
-		    altTitle = vals[0].value;
-		}
-		log.debug("altTitle = " + altTitle);		
+		log.debug("packageDOI = " + packageDOI);		
 		
 
 		// article DOI
@@ -214,7 +203,6 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			}
 			log.debug("file internalID = " + fileItem.getID());
 
-			
 			// embargo setting (of last file processed)
 			vals = fileItem.getMetadata("dc.type.embargo");
 			if (vals.length > 0) {
@@ -225,9 +213,7 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
 			if (vals.length > 0) {
 			    embargoDate = vals[0].value;
 				futureEmbargoDate = futureDate(embargoDate);
-			}			
-			
-		
+			}
 
 			if((embargoType.equals("untilArticleAppears"))) {
 			    if (((embargoDate == null) || (embargoDate.equals(""))) || ((embargoDate != null) && (!(embargoDate.equals(""))) && (futureEmbargoDate))){
@@ -260,10 +246,8 @@ public class EmbargoedFilePublished extends AbstractCurationTask {
         }
         
 	if (reportItem) {
-		report(packageDOI + ", " + articleDOI + "," + altTitle + ", " + embargoType + ", " + embargoDate);
+		report(packageDOI + ", " + articleDOI + "," + embargoType + ", " + embargoDate);
 	}
-
-
 
 	log.debug("EmbargoedFilePublished complete");
 
