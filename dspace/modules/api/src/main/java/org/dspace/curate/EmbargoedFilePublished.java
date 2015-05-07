@@ -62,12 +62,15 @@ import org.apache.log4j.Logger;
  * metadata (dc.identifier.citation) yet still have an embargo in place
  * with a future embargo release date.
  *
- * EmbargoedFilePublished can be run from the command line as follows (please note that 
- * an output file with the name embargoedfilepublished.csv will be written to 
- * a temp directory that must already exist):
+ * EmbargoedFilePublished can be run from the command line within an up and
+ * running VM to generate output showing the package DOI, article DOI, 
+ * embargo type and embargo date for each item.
+ *
+ * For example, to run EmbargoedFilePublished from the command line within an
+ * up and running VM and create a .csv output file, enter the following:
  * /opt/dryad/bin/dspace curate -v -t embargoedfilepublished -i 10255/3 -r - >~/temp/embargoedfilepublished.csv
- * To view the output file:
- * cat ~/temp/embargoedfilepublished.csv 
+ * To view the resulting output file:
+ * cat ~/temp/embargoedfilepublished.csv
  *
  * The task succeeds if it was able to calculate the correct result.
  *
