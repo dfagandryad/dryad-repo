@@ -484,10 +484,12 @@ th {
 }
 tr.ds-table-row.odd {
 	color: inherit;
+
 /*	background-color: rgb(238, 238, 238); */
 }
 tr.ds-table-row.even {
 	color: inherit;
+
 /*	background-color: rgb(255, 255, 255); */
 }
 td {
