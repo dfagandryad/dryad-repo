@@ -64,13 +64,17 @@
 				<default.solr.search.server>http://localhost:9999/solr/search/</default.solr.search.server>
 				<default.solr.stats.server>http://localhost:9999/solr/statistics/</default.solr.stats.server>
 				<default.solr.dryad.server>http://localhost:9999/solr/dryad/</default.solr.dryad.server>
-                <default.solr.authority.server>http://localhost:9999/solr/authority/</default.solr.authority.server>
+		                <default.solr.authority.server>http://localhost:9999/solr/authority/</default.solr.authority.server>
 				<!-- Location for the LoC BagIt software; we call from the cmdline -->
 				<default.bagit.executable>/home/dryad/bagit-3.6/bin/bag</default.bagit.executable>
 				<!-- Whether we should send bagit to test/dev server or production -->
 				<default.bagit.testing.mode>true</default.bagit.testing.mode>
-				<!-- Location for the journal-submit config file -->
-				<default.submit.journal.config>/opt/dryad/config/DryadJournalSubmission.properties</default.submit.journal.config>
+
+                                <!-- Location for the journal-submit config file -->
+                                <default.submit.journal.config>/opt/dryad/config/DryadJournalSubmission.properties</default.submit.journal.config>
+                                <default.submit.journal.email>dryad.journal.submit@gmail.com</default.submit.journal.email>
+                                <default.submit.journal.label>journal-submit</default.submit.journal.label>
+                                <default.submit.journal.clientsecret>{"installed":{"client_id":"239959048910-8l75ifpqj2mt9dsutubr4nbcprn9h6ev.apps.googleusercontent.com","auth_uri":"https://accounts.google.com/o/oauth$
 
 				<!-- Payment System -->
 				<paypal.vendor>PayPal</paypal.vendor>
