@@ -70,7 +70,7 @@ import org.apache.log4j.Logger;
  * @author Ryan Scherle
  */
 @Suspendable
-public class DataPackageStats extends AbstractCurationTask {
+public class CurationWeeklyReport extends AbstractCurationTask {
 
     private static Logger log = Logger.getLogger(DataPackageStats.class);
     private IdentifierService identifierService = null;
