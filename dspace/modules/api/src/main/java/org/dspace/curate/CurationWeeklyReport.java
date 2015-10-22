@@ -123,6 +123,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	int numReadmes = 0;
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
+	String dateIssued = "\"[unknown]\"";
 
 	
 	try {
