@@ -282,10 +282,11 @@ public class DataPackageStats extends AbstractCurationTask {
 
 		}
 		log.info(handle + " done.");
-	    } catch (Exception e) {
-		log.fatal("Skipping -- Exception in processing " + handle, e);
-		setResult("Object has a fatal error: " + handle + "\n" + e.getMessage());
-		report("Object has a fatal error: " + handle + "\n" + e.getMessage());
+	    } 
+	    //df catch (Exception e) {
+	    // log.fatal("Skipping -- Exception in processing " + handle, e);
+	    // 		setResult("Object has a fatal error: " + handle + "\n" + e.getMessage());
+	    // 		report("Object has a fatal error: " + handle + "\n" + e.getMessage());
 		
 		context.abort();
 		return Curator.CURATE_SKIP;
