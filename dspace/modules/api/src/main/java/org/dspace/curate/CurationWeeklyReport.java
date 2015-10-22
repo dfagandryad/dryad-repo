@@ -122,7 +122,6 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
-	String dateIssued = "\"[unknown]\"";
 
 	
 	try {
@@ -135,7 +134,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
 	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, " +
-		   "embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned, dateIssued");
+		   "embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -290,7 +289,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	report(handle + ", " + packageDOI + ", " + articleDOI + ", \"" + journal + "\", " +
 	       journalAllowsEmbargo + ", " + journalAllowsReview +
 	       embargoType + ", " + embargoDate + ", " + manuscriptNum + ", " +
-	       wentThroughReview + ", " + dateAccessioned + ", " + dateIssued);
+	       wentThroughReview + ", " + dateAccessioned);
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	try {
