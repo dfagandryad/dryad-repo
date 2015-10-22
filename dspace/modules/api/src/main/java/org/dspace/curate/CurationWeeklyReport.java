@@ -287,8 +287,8 @@ public class DataPackageStats extends AbstractCurationTask {
 	    // 		setResult("Object has a fatal error: " + handle + "\n" + e.getMessage());
 	    // 		report("Object has a fatal error: " + handle + "\n" + e.getMessage());
 		
-		context.abort();
-		return Curator.CURATE_SKIP;
+	    // 				context.abort();
+	    // 				return Curator.CURATE_SKIP;
 	    }
 	} else {
 	    log.info("Skipping -- non-item DSpace object");
