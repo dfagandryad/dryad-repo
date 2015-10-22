@@ -136,7 +136,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
 	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, " +
-		   "embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned");
+		   "embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned, dateIssued");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -363,7 +363,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	       journalAllowsEmbargo + ", " + journalAllowsReview +
 	       numberOfFiles + ", " + packageSize + ", " +
 	       embargoType + ", " + embargoDate + ", " + numberOfDownloads + ", " + manuscriptNum + ", " +
-	       numReadmes + ", " + wentThroughReview + ", " + dateAccessioned);
+	       numReadmes + ", " + wentThroughReview + ", " + dateAccessioned + ", " + dateIssued);
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	try {
