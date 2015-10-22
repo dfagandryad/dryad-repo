@@ -120,12 +120,12 @@ public class DataPackageStats extends AbstractCurationTask {
 	String embargoType = "none";
 	String embargoDate = "";
 	int maxDownloads = 0;
-	String numberOfDownloads = "\"[unknown]\"";
+
 	String manuscriptNum = null;
 	int numReadmes = 0;
 	boolean wentThroughReview = false;
-	String dateAccessioned = "\"[unknown]\"";
-	
+	String dateAccessioned = "";
+	String dateIssued = "";	
 	 
 
 	
