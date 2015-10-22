@@ -400,6 +400,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 
 
+
+
     /**
        Date validation using SimpleDateFormat
        Takes a string and verifies it is a legal date in the expected format
@@ -453,30 +455,6 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		return true;
 
 	} // end isValidDate
-
-
-    /**
-       Get user input for beginning date.
-    **/
-    
-	public string userInputDate(String prompt)
-	{
-    	Scanner inputReg = new Scanner(System.in);
-    	Date theDate =  = "99990101;    
- 
-	    System.out.print(prompt);
-    	try {
-        	theDate = new SimpleDateFormat("yyyyddMM").parse(inputReg.nextLine().replaceAll("/", ""));
-    	} catch (ParseException e) {
-        	e.printStackTrace();
-	    }
-    	inputReg.close();
-    	if isValidDate(theDate) {    
-			return theDate;
-		} else
-			return theDate;
-			
-	} // end userInputDate
 
 
 
