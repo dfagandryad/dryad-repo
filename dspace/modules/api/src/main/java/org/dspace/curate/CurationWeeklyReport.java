@@ -436,7 +436,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 		catch (ParseException e)
 		{
-			errorMessage = "the date you provided is in an invalid date" + " format.";
+			log.fatal("Invalid date input", e);
 			return false;
 		}
 
@@ -449,7 +449,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 		if (!sdf.format(testDate).equals(date)) 
 		{
-			errorMessage = "The date that you provided is invalid.";
+			log.fatal("Invalid date input");
 			return false;
 		}
 
