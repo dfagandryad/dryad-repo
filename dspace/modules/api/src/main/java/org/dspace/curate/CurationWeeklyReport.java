@@ -218,6 +218,22 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		    dateAccessioned = vals[0].value;
 		}
 		log.debug("dateAccessioned = " + dateAccessioned);
+		
+		
+		// issue date
+		vals = item.getMetadata("dc.date.issued");
+		if (vals.length == 0) {
+		    setResult("Object has no dc.date.issued available " + handle);
+		    log.error("Skipping -- Object has no dc.date.issued available " + handle);
+		    context.abort();
+		    return Curator.CURATE_SKIP;
+		} else {
+		    dateIssued = vals[0].value;
+		}
+		log.debug("dateIssued = " + dateIssued);		
+		
+		
+		
 
 		// wentThroughReview
 		vals = item.getMetadata("dc.description.provenance");
