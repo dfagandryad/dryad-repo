@@ -198,8 +198,6 @@ public class DataPackageStats extends AbstractCurationTask {
         Scheme journalScheme = Scheme.findByIdentifier(context,"Journal");
         Concept[] journalConcept = Concept.findByPreferredLabel(context,journal,journalScheme.getID());
 
-
-
 		if(journalConcept!=null&&journalConcept.length>0) {
             if(JournalUtils.getBooleanIntegrated(journalConcept[0])|| JournalUtils.getBooleanEmbargoAllowed(journalConcept[0])) {
 		        journalAllowsEmbargo = true;
@@ -261,37 +259,6 @@ public class DataPackageStats extends AbstractCurationTask {
 		    log.debug("has a real manuscriptNum = " + manuscriptNum);
 
 		}
-
-
-		
-		// count the files, and compute statistics that depend on the files
-		log.debug("getting data file info");
-		DCValue[] dataFiles = item.getMetadata("dc.relation.haspart");
-		if (dataFiles.length == 0) {
-		    setResult("Object has no dc.relation.haspart available " + handle);
-		    log.error("Skipping -- Object has no dc.relation.haspart available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    numberOfFiles = "" + dataFiles.length;
-		    packageSize = 0;
-		    
-		    // for each data file in the package
-
-		    for(int i = 0; i < dataFiles.length; i++) {
-			String fileID = dataFiles[i].value;
-			log.debug(" ======= processing fileID = " + fileID);
-
-			// get the DSpace Item for this fileID
-			Item fileItem = getDSpaceItem(fileID);
-
-			if(fileItem == null) {
-			    log.error("Skipping data file -- it's null");
-			    break;
-			}
-			log.debug("file internalID = " + fileItem.getID());
-
-
 
 			
 			// embargo setting (of last file processed)
