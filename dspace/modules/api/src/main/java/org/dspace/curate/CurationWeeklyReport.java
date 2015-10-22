@@ -128,6 +128,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
 	String dateIssued = "\"[unknown]\"";
+	Date begDate = null;
+	Date endDate = null;
 
 
 	begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
@@ -470,7 +472,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
        Get user input for beginning date.
     **/
     
-	public string userInputDate(String prompt)
+	public Date userInputDate(String prompt)
 	{
     	Scanner inputReg = new Scanner(System.in);
     	Date theDate = "99990101";
