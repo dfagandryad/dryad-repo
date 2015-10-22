@@ -482,7 +482,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
         	e.printStackTrace();
 	    }
     	inputReg.close();
-    	if isValidDate(theDate) {    
+    	if (isValidDate(theDate)) {    
 			return theDate;
 		} else
 			return theDate;
