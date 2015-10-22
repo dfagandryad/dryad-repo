@@ -476,7 +476,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	public Date userInputDate(String prompt)
 	{
     	Scanner inputReg = new Scanner(System.in);
-    	Date theDate = "99990101";
+    	Date theDate = null;
     	boolean validDate = false;
  
 	    System.out.print(prompt);
