@@ -417,7 +417,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
        Takes a string and verifies it is a legal date in the expected format
     **/
 
-	public boolean isValidDate(String date)
+	public boolean isValidDate(Date date)
 	{
 		// set date format, this can be changed to whatever format
 		// you want, MM-dd-yyyy, MM.dd.yyyy, dd.MM.yyyy etc.
