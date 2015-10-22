@@ -359,8 +359,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 	setResult("Last processed item = " + handle + " -- " + packageDOI);
 	report(handle + ", " + packageDOI + ", " + articleDOI + ", \"" + journal + "\", " +
-	       journalAllowsEmbargo + ", " + journalAllowsReview + ", " + numKeywords + ", " +
-	       numKeywordsJournal + ", " + numberOfFiles + ", " + packageSize + ", " +
+	       journalAllowsEmbargo + ", " + journalAllowsReview +
+	       numberOfFiles + ", " + packageSize + ", " +
 	       embargoType + ", " + embargoDate + ", " + numberOfDownloads + ", " + manuscriptNum + ", " +
 	       numReadmes + ", " + wentThroughReview + ", " + dateAccessioned);
 
