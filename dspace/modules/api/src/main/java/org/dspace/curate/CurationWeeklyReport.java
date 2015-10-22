@@ -473,7 +473,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	public string userInputDate(String prompt)
 	{
     	Scanner inputReg = new Scanner(System.in);
-    	Date theDate = "99990101";    
+    	Date theDate = "99990101";
+    	boolean validDate = false;
  
 	    System.out.print(prompt);
     	try {
@@ -482,7 +483,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
         	e.printStackTrace();
 	    }
     	inputReg.close();
-    	if (isValidDate(theDate)) {    
+    	validDate = isValidDate(theDate);
+    	if (validDate) {    
 			return theDate;
 		} else
 			return theDate;
