@@ -68,7 +68,7 @@ import org.apache.log4j.Logger;
  * @author Ryan Scherle
  */
 @Suspendable
-public class DataPackageStats extends AbstractCurationTask {
+public class CurationWeeklyReport extends AbstractCurationTask {
 
     private static Logger log = Logger.getLogger(DataPackageStats.class);
     private IdentifierService identifierService = null;
@@ -111,8 +111,8 @@ public class DataPackageStats extends AbstractCurationTask {
 	String journal = "[no journal found]"; // don't add quotes here, because journal is always quoted when output below
 	boolean journalAllowsEmbargo = false;
 	boolean journalAllowsReview = false;
-	String numKeywords = "\"[no numKeywords found]\"";
-	String numKeywordsJournal = "\"[unknown]\"";
+
+
 	String numberOfFiles = "\"[no numberOfFiles found]\"";
 	long packageSize = 0;
 	String embargoType = "none";
@@ -134,8 +134,8 @@ public class DataPackageStats extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, numKeywords, numKeywordsJournal, numberOfFiles, packageSize, " +
-		   "embargoType, embargoDate, numberOfDownloads, manuscriptNum, numReadmes, wentThroughReview, dateAccessioned");
+	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, " +
+		   "embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
