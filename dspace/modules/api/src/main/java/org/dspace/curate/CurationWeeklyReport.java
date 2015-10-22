@@ -113,13 +113,14 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	boolean journalAllowsReview = false;
 
 
-
+	String numberOfFiles = "\"[no numberOfFiles found]\"";
+	long packageSize = 0;
 	String embargoType = "none";
 	String embargoDate = "";
-
-
+	int maxDownloads = 0;
+	String numberOfDownloads = "\"[unknown]\"";
 	String manuscriptNum = null;
-
+	int numReadmes = 0;
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
 
@@ -244,7 +245,6 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 		}
 
-
 			// embargo setting (of last file processed)
 			vals = fileItem.getMetadata("dc.type.embargo");
 			if (vals.length > 0) {
@@ -264,7 +264,22 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 			log.debug("embargoDate = " + embargoDate);
 			
 		       			    			
-
+			// number of downlaods for most downloaded file
+			// must use the DSpace item ID, since the solr stats system is based on this ID
+			// The SOLR address is hardcoded to the production system here, because even when we run on test servers,
+			// it's easiest to use the real stats --the test servers typically don't have useful stats available
+			URL downloadStatURL = new URL("http://datadryad.org/solr/statistics/select/?indent=on&q=owningItem:" + fileItem.getID());
+			log.debug("fetching " + downloadStatURL);
+			Document statsdoc = docb.parse(downloadStatURL.openStream());
+			NodeList nl = statsdoc.getElementsByTagName("result");
+			String downloadsAtt = nl.item(0).getAttributes().getNamedItem("numFound").getTextContent();
+			int currDownloads = Integer.parseInt(downloadsAtt);
+			if(currDownloads > maxDownloads) {
+			    maxDownloads = currDownloads;
+			    // rather than converting maxDownloads back to a string, just use the string we parsed above
+			    numberOfDownloads = downloadsAtt;
+			}
+			log.debug("max downloads (as of file " + fileID + ") = " + numberOfDownloads);
 			
 		    }
 
@@ -287,9 +302,10 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 	setResult("Last processed item = " + handle + " -- " + packageDOI);
 	report(handle + ", " + packageDOI + ", " + articleDOI + ", \"" + journal + "\", " +
-	       journalAllowsEmbargo + ", " + journalAllowsReview +
-	       embargoType + ", " + embargoDate + ", " + manuscriptNum + ", " +
-	       wentThroughReview + ", " + dateAccessioned);
+	       journalAllowsEmbargo + ", " + journalAllowsReview + ", " + numKeywords + ", " +
+	       numKeywordsJournal + ", " + numberOfFiles + ", " + packageSize + ", " +
+	       embargoType + ", " + embargoDate + ", " + numberOfDownloads + ", " + manuscriptNum + ", " +
+	       numReadmes + ", " + wentThroughReview + ", " + dateAccessioned);
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	try {
