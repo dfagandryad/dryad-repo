@@ -126,17 +126,16 @@ public class DataPackageStats extends AbstractCurationTask {
 	boolean wentThroughReview = false;
 	String dateAccessioned = "";
 	String dateIssued = "";	
-	 
 
-	
+
 	try {
 	    context = new Context();
         } catch (SQLException e) {
 	    log.fatal("Unable to open database connection", e);
 	    return Curator.CURATE_FAIL;
 	}
-	begDate = userInputDate("Enter beginning date (YYYYDDMM): ")
-	endDate = userInputDate("Enter ending date (YYYYDDMM): ")
+	begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
+	endDate = userInputDate("Enter ending date (YYYYDDMM): ");
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
