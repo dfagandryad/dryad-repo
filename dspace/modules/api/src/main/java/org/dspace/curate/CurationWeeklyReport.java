@@ -68,7 +68,7 @@ import org.apache.log4j.Logger;
  * @author Ryan Scherle
  */
 @Suspendable
-public class CurationWeeklyReport extends AbstractCurationTask {
+public class DataPackageStats extends AbstractCurationTask {
 
     private static Logger log = Logger.getLogger(DataPackageStats.class);
     private IdentifierService identifierService = null;
@@ -111,8 +111,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	String journal = "[no journal found]"; // don't add quotes here, because journal is always quoted when output below
 	boolean journalAllowsEmbargo = false;
 	boolean journalAllowsReview = false;
-
-
+	String numKeywords = "\"[no numKeywords found]\"";
+	String numKeywordsJournal = "\"[unknown]\"";
 	String numberOfFiles = "\"[no numberOfFiles found]\"";
 	long packageSize = 0;
 	String embargoType = "none";
@@ -134,8 +134,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, " +
-		   "embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned");
+	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, numKeywords, numKeywordsJournal, numberOfFiles, packageSize, " +
+		   "embargoType, embargoDate, numberOfDownloads, manuscriptNum, numReadmes, wentThroughReview, dateAccessioned");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -232,7 +232,14 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		log.debug("wentThroughReview = " + wentThroughReview);
 
 		
+		// number of keywords
+		int intNumKeywords = item.getMetadata("dc.subject").length +
+		    item.getMetadata("dwc.ScientificName").length +
+		    item.getMetadata("dc.coverage.temporal").length +
+		    item.getMetadata("dc.coverage.spatial").length;
 
+		numKeywords = "" + intNumKeywords; //convert integer to string by appending
+		log.debug("numKeywords = " + numKeywords);
 
 		// manuscript number
 		DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
@@ -245,6 +252,64 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 		}
 
+
+		
+		// count the files, and compute statistics that depend on the files
+		log.debug("getting data file info");
+		DCValue[] dataFiles = item.getMetadata("dc.relation.haspart");
+		if (dataFiles.length == 0) {
+		    setResult("Object has no dc.relation.haspart available " + handle);
+		    log.error("Skipping -- Object has no dc.relation.haspart available " + handle);
+		    context.abort();
+		    return Curator.CURATE_SKIP;
+		} else {
+		    numberOfFiles = "" + dataFiles.length;
+		    packageSize = 0;
+		    
+		    // for each data file in the package
+
+		    for(int i = 0; i < dataFiles.length; i++) {
+			String fileID = dataFiles[i].value;
+			log.debug(" ======= processing fileID = " + fileID);
+
+			// get the DSpace Item for this fileID
+			Item fileItem = getDSpaceItem(fileID);
+
+			if(fileItem == null) {
+			    log.error("Skipping data file -- it's null");
+			    break;
+			}
+			log.debug("file internalID = " + fileItem.getID());
+			
+			// total package size
+			// add total size of the bitstreams in this data file 
+			// to the cumulative total for the package
+			// (includes metadata, readme, and textual conversions for indexing)
+			for (Bundle bn : fileItem.getBundles()) {
+			    for (Bitstream bs : bn.getBitstreams()) {
+				packageSize = packageSize + bs.getSize();
+			    }
+			}
+			log.debug("total package size (as of file " + fileID + ") = " + packageSize);
+
+			// Readmes
+			// Check for at least one readme bitstream. There may be more, due to indexing and cases
+			// where the file itself is named readme. We only count one readme per datafile.
+			boolean readmeFound = false;
+			for (Bundle bn : fileItem.getBundles()) {
+			    for (Bitstream bs : bn.getBitstreams()) {
+				String name = bs.getName().trim().toLowerCase();
+				if(name.startsWith("readme")) {
+				    readmeFound = true;
+				}
+			    }
+			}
+			if(readmeFound) {
+			    numReadmes++;
+			}
+			log.debug("total readmes (as of file " + fileID + ") = " + numReadmes);
+
+			
 			// embargo setting (of last file processed)
 			vals = fileItem.getMetadata("dc.type.embargo");
 			if (vals.length > 0) {
