@@ -144,14 +144,13 @@ public class DataPackageStats extends AbstractCurationTask {
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
-	    try {
 		handle = item.getHandle();
 		log.info("handle = " + handle);
 		
 		if (handle == null) {
 		    // this item is still in workflow - no handle assigned
 		    handle = "in workflow";
-		}
+
 		
 		// package DOI
 		DCValue[] vals = item.getMetadata("dc.identifier");
