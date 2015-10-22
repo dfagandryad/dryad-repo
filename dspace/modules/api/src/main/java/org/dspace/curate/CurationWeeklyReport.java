@@ -361,51 +361,50 @@ public class DataPackageStats extends AbstractCurationTask {
 
 	public boolean isValidDate(String date)
 	{
-    	// set date format, this can be changed to whatever format
-    	// you want, MM-dd-yyyy, MM.dd.yyyy, dd.MM.yyyy etc.
-    	// you can read more about it here:
-    	// http://java.sun.com/j2se/1.4.2/docs/api/index.html
-    
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyddMM");
-    
-    	// declare and initialize testDate variable, this is what will hold
-    	// our converted string
-    
-    	Date testDate = null;
+		// set date format, this can be changed to whatever format
+		// you want, MM-dd-yyyy, MM.dd.yyyy, dd.MM.yyyy etc.
+		// you can read more about it here:
+		// http://java.sun.com/j2se/1.4.2/docs/api/index.html
 
-    	// we will now try to parse the string into date form
-    	try
-    	{
-    	  testDate = sdf.parse(date);
-    	}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyddMM");
 
-    	// if the format of the string provided doesn't match the format we 
-    	// declared in SimpleDateFormat() we will get an exception
+		// declare and initialize testDate variable, this is what will hold
+		// our converted string
 
-    	catch (ParseException e)
-    	{
-      	errorMessage = "the date you provided is in an invalid date" +
-                              " format.";
-      	return false;
-    	}
+		Date testDate = null;
 
-    	// dateformat.parse will accept any date as long as it's in the format
-    	// you defined, it simply rolls dates over, for example, december 32 
-    	// becomes jan 1 and december 0 becomes november 30
-    	// This statement will make sure that once the string 
-    	// has been checked for proper formatting that the date is still the 
-    	// date that was entered, if it's not, we assume that the date is invalid
+		// we will now try to parse the string into date form
+		try
+		{
+		  testDate = sdf.parse(date);
+		}
 
-    	if (!sdf.format(testDate).equals(date)) 
-    	{
-      	errorMessage = "The date that you provided is invalid.";
-      	return false;
-    	}
-    
-    	// if we make it to here without getting an error it is assumed that
-    	// the date was a valid one and that it's in the proper format
+		// if the format of the string provided doesn't match the format we 
+		// declared in SimpleDateFormat() we will get an exception
 
-    	return true;
+		catch (ParseException e)
+		{
+			errorMessage = "the date you provided is in an invalid date" + " format.";
+			return false;
+		}
+
+		// dateformat.parse will accept any date as long as it's in the format
+		// you defined, it simply rolls dates over, for example, december 32 
+		// becomes jan 1 and december 0 becomes november 30
+		// This statement will make sure that once the string 
+		// has been checked for proper formatting that the date is still the 
+		// date that was entered, if it's not, we assume that the date is invalid
+
+		if (!sdf.format(testDate).equals(date)) 
+		{
+			errorMessage = "The date that you provided is invalid.";
+			return false;
+		}
+
+		// if we make it to here without getting an error it is assumed that
+		// the date was a valid one and that it's in the proper format
+
+		return true;
 
 	} // end isValidDate
 
@@ -418,7 +417,7 @@ public class DataPackageStats extends AbstractCurationTask {
 	{
     	Scanner inputReg = new Scanner(System.in);
     	Date theDate =  = "99990101;    
- 
+ 
 	    System.out.print(prompt);
     	try {
         	theDate = new SimpleDateFormat("yyyyddMM").parse(inputReg.nextLine().replaceAll("/", ""));
