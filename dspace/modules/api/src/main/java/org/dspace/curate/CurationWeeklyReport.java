@@ -232,14 +232,6 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		log.debug("wentThroughReview = " + wentThroughReview);
 
 		
-		// number of keywords
-		int intNumKeywords = item.getMetadata("dc.subject").length +
-		    item.getMetadata("dwc.ScientificName").length +
-		    item.getMetadata("dc.coverage.temporal").length +
-		    item.getMetadata("dc.coverage.spatial").length;
-
-		numKeywords = "" + intNumKeywords; //convert integer to string by appending
-		log.debug("numKeywords = " + numKeywords);
 
 		// manuscript number
 		DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
