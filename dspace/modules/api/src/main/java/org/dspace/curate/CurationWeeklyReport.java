@@ -491,7 +491,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
         DateFormat format = new SimpleDateFormat("yyyyMMdd");
     	Calendar calcuatedDate = new GregorianCalendar();
     	calcuatedDate.add(Calendar.DATE, numberOfDaysAgo);
-    	Date newDate = DateFormat.getDateInstance().format(calcuatedDate.getTime());
+    	Date newDate = date.getTime();
 		return newDate;
 			
 	} // end getADate
