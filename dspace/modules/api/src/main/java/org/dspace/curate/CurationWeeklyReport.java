@@ -142,8 +142,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	}
 	
 	
-	#begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
-	#endDate = userInputDate("Enter ending date (YYYYDDMM): ");
+	// begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
+	// endDate = userInputDate("Enter ending date (YYYYDDMM): ");
 	DateFormat df = new SimpleDateFormat("YYYYDDMM");
 	Date currentDate = new Date();
 	endDate = dateFormat.parse(previousDate);
