@@ -415,9 +415,9 @@ public class CurationWeeklyReport extends AbstractCurationTask {
     /**
        Date validation using SimpleDateFormat
        Takes a string and verifies it is a legal date in the expected format
-    **/
 
-	public boolean isValidDate(Date date)
+
+	public boolean isValidDate(String strDate)
 	{
 		// set date format, this can be changed to whatever format
 		// you want, MM-dd-yyyy, MM.dd.yyyy, dd.MM.yyyy etc.
@@ -426,15 +426,14 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyddMM");
 
-		// declare and initialize testDate variable, this is what will hold
-		// our converted string
+		// declare and initialize testDate variable, to hold converted string
 
 		Date testDate = null;
 
-		// we will now try to parse the string into date form
+		// parse the string into date form
 		try
 		{
-		  testDate = sdf.parse(date);
+		  testDate = sdf.parse(strDate);
 		}
 
 		// if the format of the string provided doesn't match the format we 
@@ -453,7 +452,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		// has been checked for proper formatting that the date is still the 
 		// date that was entered, if it's not, we assume that the date is invalid
 
-		if (!sdf.format(testDate).equals(date)) 
+		if (!sdf.format(testDate).equals(strDate)) 
 		{
 			log.fatal("Invalid date input");
 			return false;
@@ -466,7 +465,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 	} // end isValidDate
 
-
+    **/
 
 
     /**
@@ -486,11 +485,11 @@ public class CurationWeeklyReport extends AbstractCurationTask {
         	e.printStackTrace();
 	    }
     	inputReg.close();
-    	validDate = isValidDate(theDate);
-    	if (validDate) {    
-			return theDate;
-		} else
-			return theDate;
+    	// validDate = isValidDate(theDate);
+    	// if (validDate) {    
+		// 	return theDate;
+		// } else
+		return theDate;
 			
 	} // end userInputDate
 
