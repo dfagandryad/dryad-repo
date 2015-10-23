@@ -155,6 +155,15 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		// endDate = dateFormat.parse(previousDate);
 	endDate = getADate(NUM_OF_DAYS_SINCE_END);
 	beginDate = getADate(NUM_OF_DAYS_SINCE_BEGIN);
+	if(DateTimeComparator.getDateOnlyInstance().compare(beginDate, endDate)==0) {
+		System.out.println("Comp Equals: " + beginDate + " " + endDate);
+	}
+	if(DateTimeComparator.getDateOnlyInstance().compare(firstDate, secondDate)<0) {
+		System.out.println("Comp Less Than: " + beginDate + " " + endDate);
+	}
+	if(DateTimeComparator.getDateOnlyInstance().compare(firstDate, secondDate)>0) {
+		System.out.println("Comp Greater Than: " + beginDate + " " + endDate);
+	}
 
 	System.out.println("endDate: "+endDate);
 	
@@ -490,6 +499,22 @@ public class CurationWeeklyReport extends AbstractCurationTask {
     
 	public Date getADate(int numberOfDaysAgo)
 	{
+		DateTime dt = new DateTime();
+		DateTime newDate = dt.minusDays(numberOfDaysAgo);		
+		return newDate;
+			
+	} // end getADate
+
+
+
+
+
+    /**
+       Get beginning date.
+
+    
+	public Date getADate(int numberOfDaysAgo)
+	{
         DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
     	Calendar calcuatedDate = new GregorianCalendar();
     	calcuatedDate.set(Calendar.HOUR_OF_DAY, 0);
@@ -500,6 +525,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		return newDate;
 			
 	} // end getADate
+
+    **/
 
 
 
