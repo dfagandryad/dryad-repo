@@ -133,8 +133,6 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	Date endDate = null;
 
 
-	begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
-	endDate = userInputDate("Enter ending date (YYYYDDMM): ");
 	
 	try {
 	    context = new Context();
@@ -142,6 +140,10 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	    log.fatal("Unable to open database connection", e);
 	    return Curator.CURATE_FAIL;
 	}
+	
+	
+	begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
+	endDate = userInputDate("Enter ending date (YYYYDDMM): ");
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
