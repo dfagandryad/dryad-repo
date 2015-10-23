@@ -133,8 +133,8 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
 	String dateIssued = "\"[unknown]\"";
-	Date beginDate = null;
-	Date endDate = null;
+	DateTime beginDate = null;
+	DateTime endDate = null;
 	final int NUM_OF_DAYS_SINCE_END = -1;
 	final int NUM_OF_DAYS_SINCE_BEGIN = -8;
 
@@ -497,7 +497,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
        Get beginning date.
     **/
     
-	public Date getADate(int numberOfDaysAgo)
+	public DateTime getADate(int numberOfDaysAgo)
 	{
 		DateTime dt = new DateTime();
 		DateTime newDate = dt.minusDays(numberOfDaysAgo);		
