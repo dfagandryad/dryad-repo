@@ -476,6 +476,27 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 
 
     /**
+       Get beginning date.
+    **/
+    
+	public Date getBeginDate()
+	{
+		final int NUMBER_OF_DAYS_AGO = -14;
+        DateFormat format = new SimpleDateFormat("yyyyMMdd");
+        format.setLenient(true);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new java.util.Date());
+        cal.add(Calendar.DATE, NUMBER_OF_DAYS_AGO);
+        String theBeginDate = DateFormat.getDateInstance().format(cal.getTime());
+		return theBeginDate;
+			
+	} // end getBeginDate
+
+
+
+
+
+    /**
        Get user input for beginning date.
     **/
     
@@ -499,7 +520,6 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		return theDate;
 			
 	} // end userInputDate
-
 
 
     /**
