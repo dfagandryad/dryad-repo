@@ -21,6 +21,8 @@ import java.util.Properties;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.Scanner;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
@@ -129,8 +131,10 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
 	String dateIssued = "\"[unknown]\"";
-	Date begDate = null;
+	Date beginDate = null;
 	Date endDate = null;
+	final int NUM_OF_DAYS_SINCE_END = -1;
+	final int NUM_OF_DAYS_SINCE_BEGIN = -8;
 
 
 	
@@ -144,9 +148,12 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	
 	// begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
 	// endDate = userInputDate("Enter ending date (YYYYDDMM): ");
-	DateFormat df = new SimpleDateFormat("YYYYDDMM");
-	Date currentDate = new Date();
-	endDate = dateFormat.parse(previousDate);
+		// DateFormat df = new SimpleDateFormat("YYYYDDMM");
+		// Date currentDate = new Date();
+		// endDate = dateFormat.parse(previousDate);
+	endDate = getADate(NUM_OF_DAYS_SINCE_END);
+	beginDate = getADate(NUM_OF_DAYS_SINCE_BEGIN);
+
 	System.out.println("endDate: "+endDate);
 	
 	if (dso.getType() == Constants.COLLECTION) {
@@ -479,6 +486,21 @@ public class CurationWeeklyReport extends AbstractCurationTask {
        Get beginning date.
     **/
     
+	public Date getADate(byte numberOfDaysAgo)
+	{
+        DateFormat format = new SimpleDateFormat("yyyyMMdd");
+    	Calendar calcuatedDate = new GregorianCalendar();
+    	calcuatedDate.add(Calendar.DATE, numberOfDays);
+		return calcuatedDate;
+			
+	} // end getADate
+
+
+
+    /**
+       Get beginning date.
+
+    
 	public Date getBeginDate()
 	{
 		final int NUMBER_OF_DAYS_AGO = -14;
@@ -491,6 +513,29 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 		return theBeginDate;
 			
 	} // end getBeginDate
+
+    **/
+
+
+    
+    
+    /**
+       Get beginning date.
+
+
+	public Date getBeginDate()
+	{
+	DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+    Calendar date = new GregorianCalendar();
+
+    date.add(Calendar.DATE, -80);
+
+    date.add(Calendar.DATE, -200);
+    System.out.println( format.format(date.getTime()) );
+  }
+}
+
+    **/
 
 
 
