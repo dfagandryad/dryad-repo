@@ -142,8 +142,12 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	}
 	
 	
-	begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
-	endDate = userInputDate("Enter ending date (YYYYDDMM): ");
+	#begDate = userInputDate("Enter beginning date (YYYYDDMM): ");
+	#endDate = userInputDate("Enter ending date (YYYYDDMM): ");
+	DateFormat df = new SimpleDateFormat("YYYYDDMM");
+	Date currentDate = new Date();
+	endDate = dateFormat.parse(previousDate);
+	System.out.println("endDate: "+endDate);
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
@@ -468,6 +472,7 @@ public class CurationWeeklyReport extends AbstractCurationTask {
 	} // end isValidDate
 
     **/
+
 
 
     /**
