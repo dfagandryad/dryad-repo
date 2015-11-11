@@ -52,24 +52,24 @@ import org.dspace.utils.DSpace;
 import org.apache.log4j.Logger;
 
 /**
- * DataPackageStats retrieves detailed statistics about a data package.
+ * CuratorWeeklyReport retrieves data package information for weekly curation reports.
  *
  * Some statistics are calculated based on the files that are contained in the
  * data package. Extra processing time is required to load and process the data
- * file metadata, so this report takes some time to run. For simpler information
- * about data packages, see DataPackageInfo.
+ * file metadata, so this report takes some time to run. 
  *
  * The task succeeds if it was able to locate all required stats, otherwise it fails.
- * Originally based on the RequiredMetadata task by Richard Rodgers.
+ * Originally based on the DataPackageStats by Ryan Scherle and 
+ * RequiredMetadata task by Richard Rodgers.
  *
  * Input: a single data package OR a collection that contains data packages
  * Output: CSV file with appropriate stats 
- * @author Ryan Scherle
+ * @author Debra Fagan
  */
 @Suspendable
-public class DataPackageStats extends AbstractCurationTask {
+public class CuratorWeeklyReport extends AbstractCurationTask {
 
-    private static Logger log = Logger.getLogger(DataPackageStats.class);
+    private static Logger log = Logger.getLogger(CuratorWeeklyReport.class);
     private IdentifierService identifierService = null;
     DocumentBuilderFactory dbf = null;
     DocumentBuilder docb = null;
@@ -102,7 +102,7 @@ public class DataPackageStats extends AbstractCurationTask {
      */
     @Override
     public int perform(DSpaceObject dso) throws IOException {
-	log.info("performing DataPackageStats task " + total++ );
+	log.info("performing CuratorWeeklyReport task " + total++ );
 	
 	String handle = "\"[no handle found]\"";
 	String packageDOI = "\"[no package DOI found]\"";
@@ -333,7 +333,7 @@ public class DataPackageStats extends AbstractCurationTask {
 	    // ignore it
 	}
 
-	log.debug("DataPackageStats complete");
+	log.debug("CuratorWeeklyReport complete");
 
 	try { 
 	    context.complete();
