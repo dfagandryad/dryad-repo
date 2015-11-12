@@ -124,7 +124,8 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	int numReadmes = 0;
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
-
+	String dateIssued = "\"[unknown]\"";
+	
 	
 	try {
 	    context = new Context();
@@ -135,8 +136,7 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, numKeywords, numKeywordsJournal, numberOfFiles, packageSize, " +
-		   "embargoType, embargoDate, numberOfDownloads, manuscriptNum, numReadmes, wentThroughReview, dateAccessioned");
+	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned, dateIssued");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -218,6 +218,21 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 		    dateAccessioned = vals[0].value;
 		}
 		log.debug("dateAccessioned = " + dateAccessioned);
+
+
+		// issued date
+		vals = item.getMetadata("dc.date.issued");
+		if (vals.length == 0) {
+		    setResult("Object has no dc.date.issued available " + handle);
+		    log.error("Skipping -- Object has no dc.date.issued available " + handle);
+		    context.abort();
+		    return Curator.CURATE_SKIP;
+		} else {
+		    dateIssued = vals[0].value;
+		}
+		log.debug("dateIssued = " + dateIssued);
+
+
 
 		// wentThroughReview
 		vals = item.getMetadata("dc.description.provenance");
@@ -367,11 +382,7 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
         }
 
 	setResult("Last processed item = " + handle + " -- " + packageDOI);
-	report(handle + ", " + packageDOI + ", " + articleDOI + ", \"" + journal + "\", " +
-	       journalAllowsEmbargo + ", " + journalAllowsReview + ", " + numKeywords + ", " +
-	       numKeywordsJournal + ", " + numberOfFiles + ", " + packageSize + ", " +
-	       embargoType + ", " + embargoDate + ", " + numberOfDownloads + ", " + manuscriptNum + ", " +
-	       numReadmes + ", " + wentThroughReview + ", " + dateAccessioned);
+	report(handle + "," + packageDOI + "," + articleDOI + "," + journal + "," + journalAllowsEmbargo + "," + journalAllowsReview + "," + embargoType + "," + embargoDate + "," + manuscriptNum + "," + wentThroughReview + "," + dateAccessioned + "," + dateIssued);
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	try {
