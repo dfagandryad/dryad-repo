@@ -52,11 +52,12 @@ import org.dspace.utils.DSpace;
 import org.apache.log4j.Logger;
 
 /**
- * CuratorWeeklyReport retrieves data package information for weekly curation reports.
+ * CuratorWeeklyReport retrieves detailed statistics about a data package.
  *
  * Some statistics are calculated based on the files that are contained in the
  * data package. Extra processing time is required to load and process the data
- * file metadata, so this report takes some time to run. 
+ * file metadata, so this report takes some time to run. For simpler information
+ * about data packages, see DataPackageInfo.
  *
  * The task succeeds if it was able to locate all required stats, otherwise it fails.
  * Originally based on the DataPackageStats by Ryan Scherle and 
@@ -66,10 +67,11 @@ import org.apache.log4j.Logger;
  * Output: CSV file with appropriate stats 
  * @author Debra Fagan
  */
+
 @Suspendable
 public class CuratorWeeklyReport extends AbstractCurationTask {
 
-    private static Logger log = Logger.getLogger(CuratorWeeklyReport.class);
+    private static Logger log = Logger.getLogger(DataPackageStats.class);
     private IdentifierService identifierService = null;
     DocumentBuilderFactory dbf = null;
     DocumentBuilder docb = null;
@@ -110,16 +112,19 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	String journal = "[no journal found]"; // don't add quotes here, because journal is always quoted when output below
 	boolean journalAllowsEmbargo = false;
 	boolean journalAllowsReview = false;
-	
+	String numKeywords = "\"[no numKeywords found]\"";
+	String numKeywordsJournal = "\"[unknown]\"";
+	String numberOfFiles = "\"[no numberOfFiles found]\"";
+	long packageSize = 0;
 	String embargoType = "none";
 	String embargoDate = "";
 	int maxDownloads = 0;
-
+	String numberOfDownloads = "\"[unknown]\"";
 	String manuscriptNum = null;
-
+	int numReadmes = 0;
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
-	String dateIssued = "\"[unknown]\"";
+
 	
 	try {
 	    context = new Context();
@@ -130,8 +135,8 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, " +
-		   "embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned, dateIssued");
+	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, numKeywords, numKeywordsJournal, numberOfFiles, packageSize, " +
+		   "embargoType, embargoDate, numberOfDownloads, manuscriptNum, numReadmes, wentThroughReview, dateAccessioned");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -214,20 +219,6 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 		}
 		log.debug("dateAccessioned = " + dateAccessioned);
 
-
-		// issue date (date published)
-		vals = item.getMetadata("dc.date.issued");
-		if (vals.length == 0) {
-		    setResult("Object has no dc.date.issued available " + handle);
-		    log.error("Skipping -- Object has no dc.date.issued available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    dateIssued = vals[0].value;
-		}
-		log.debug("dateIssued = " + dateIssued);
-
-
 		// wentThroughReview
 		vals = item.getMetadata("dc.description.provenance");
 		if (vals.length == 0) {
@@ -242,7 +233,14 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 		log.debug("wentThroughReview = " + wentThroughReview);
 
 		
+		// number of keywords
+		int intNumKeywords = item.getMetadata("dc.subject").length +
+		    item.getMetadata("dwc.ScientificName").length +
+		    item.getMetadata("dc.coverage.temporal").length +
+		    item.getMetadata("dc.coverage.spatial").length;
 
+		numKeywords = "" + intNumKeywords; //convert integer to string by appending
+		log.debug("numKeywords = " + numKeywords);
 
 		// manuscript number
 		DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
@@ -266,21 +264,51 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 		    context.abort();
 		    return Curator.CURATE_SKIP;
 		} else {
+		    numberOfFiles = "" + dataFiles.length;
+		    packageSize = 0;
 		    
 		    // for each data file in the package
 
 		    for(int i = 0; i < dataFiles.length; i++) {
-				String fileID = dataFiles[i].value;
-				log.debug(" ======= processing fileID = " + fileID);
+			String fileID = dataFiles[i].value;
+			log.debug(" ======= processing fileID = " + fileID);
 
-				// get the DSpace Item for this fileID
-				Item fileItem = getDSpaceItem(fileID);
+			// get the DSpace Item for this fileID
+			Item fileItem = getDSpaceItem(fileID);
 
-				if(fileItem == null) {
-				    log.error("Skipping data file -- it's null");
-				    break;
+			if(fileItem == null) {
+			    log.error("Skipping data file -- it's null");
+			    break;
 			}
 			log.debug("file internalID = " + fileItem.getID());
+			
+			// total package size
+			// add total size of the bitstreams in this data file 
+			// to the cumulative total for the package
+			// (includes metadata, readme, and textual conversions for indexing)
+			for (Bundle bn : fileItem.getBundles()) {
+			    for (Bitstream bs : bn.getBitstreams()) {
+				packageSize = packageSize + bs.getSize();
+			    }
+			}
+			log.debug("total package size (as of file " + fileID + ") = " + packageSize);
+
+			// Readmes
+			// Check for at least one readme bitstream. There may be more, due to indexing and cases
+			// where the file itself is named readme. We only count one readme per datafile.
+			boolean readmeFound = false;
+			for (Bundle bn : fileItem.getBundles()) {
+			    for (Bitstream bs : bn.getBitstreams()) {
+				String name = bs.getName().trim().toLowerCase();
+				if(name.startsWith("readme")) {
+				    readmeFound = true;
+				}
+			    }
+			}
+			if(readmeFound) {
+			    numReadmes++;
+			}
+			log.debug("total readmes (as of file " + fileID + ") = " + numReadmes);
 
 			
 			// embargo setting (of last file processed)
@@ -300,6 +328,24 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 			}
 			log.debug("embargoType = " + embargoType);
 			log.debug("embargoDate = " + embargoDate);
+			
+		       			    			
+			// number of downlaods for most downloaded file
+			// must use the DSpace item ID, since the solr stats system is based on this ID
+			// The SOLR address is hardcoded to the production system here, because even when we run on test servers,
+			// it's easiest to use the real stats --the test servers typically don't have useful stats available
+			URL downloadStatURL = new URL("http://datadryad.org/solr/statistics/select/?indent=on&q=owningItem:" + fileItem.getID());
+			log.debug("fetching " + downloadStatURL);
+			Document statsdoc = docb.parse(downloadStatURL.openStream());
+			NodeList nl = statsdoc.getElementsByTagName("result");
+			String downloadsAtt = nl.item(0).getAttributes().getNamedItem("numFound").getTextContent();
+			int currDownloads = Integer.parseInt(downloadsAtt);
+			if(currDownloads > maxDownloads) {
+			    maxDownloads = currDownloads;
+			    // rather than converting maxDownloads back to a string, just use the string we parsed above
+			    numberOfDownloads = downloadsAtt;
+			}
+			log.debug("max downloads (as of file " + fileID + ") = " + numberOfDownloads);
 			
 		    }
 
@@ -322,9 +368,10 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 
 	setResult("Last processed item = " + handle + " -- " + packageDOI);
 	report(handle + ", " + packageDOI + ", " + articleDOI + ", \"" + journal + "\", " +
-	       journalAllowsEmbargo + ", " + journalAllowsReview + ", " +
-	       embargoType + ", " + embargoDate + ", " + manuscriptNum + ", " +
-	       wentThroughReview + ", " + dateAccessioned + "," + dateIssued);
+	       journalAllowsEmbargo + ", " + journalAllowsReview + ", " + numKeywords + ", " +
+	       numKeywordsJournal + ", " + numberOfFiles + ", " + packageSize + ", " +
+	       embargoType + ", " + embargoDate + ", " + numberOfDownloads + ", " + manuscriptNum + ", " +
+	       numReadmes + ", " + wentThroughReview + ", " + dateAccessioned);
 
 	// slow this down a bit so we don't overwhelm the production SOLR server with requests
 	try {
