@@ -136,7 +136,7 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
-	    report("handle, packageDOI, articleDOI, journal, journalAllowsEmbargo, journalAllowsReview, embargoType, embargoDate, manuscriptNum, wentThroughReview, dateAccessioned, dateIssued");
+	    report("handle,packageDOI,articleDOI,journal,journalAllowsEmbargo,journalAllowsReview,embargoType,embargoDate,manuscriptNum,wentThroughReview,dateAccessioned,dateIssued");
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
@@ -377,6 +377,7 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	} else {
 	    log.info("Skipping -- non-item DSpace object");
 	    setResult("Object skipped (not an item)");
+
 	    context.abort();
 	    return Curator.CURATE_SKIP;
         }
