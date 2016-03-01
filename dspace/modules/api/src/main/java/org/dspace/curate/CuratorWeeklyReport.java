@@ -77,9 +77,6 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
     DocumentBuilder docb = null;
     static long total = 0;
     private Context context;
-//    private static List<String> journalsThatAllowReview = new ArrayList<String>();
-//    private static List<String> integratedJournals = new ArrayList<String>();
-//    private static List<String> integratedJournalsThatAllowEmbargo = new ArrayList<String>();
     
     @Override 
     public void init(Curator curator, String taskId) throws IOException {
@@ -87,13 +84,13 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	
         identifierService = new DSpace().getSingletonService(IdentifierService.class);            
 	
-	// init xml processing
-	try {
-	    dbf = DocumentBuilderFactory.newInstance();
-	    docb = dbf.newDocumentBuilder();
-	} catch (ParserConfigurationException e) {
-	    throw new IOException("unable to initiate xml processor", e);
-	}
+		// init xml processing
+		try {
+		    dbf = DocumentBuilderFactory.newInstance();
+		    docb = dbf.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+		    throw new IOException("unable to initiate xml processor", e);
+		}
     }
     
     /**
@@ -112,16 +109,9 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	String journal = "[no journal found]"; // don't add quotes here, because journal is always quoted when output below
 	boolean journalAllowsEmbargo = false;
 	boolean journalAllowsReview = false;
-	String numKeywords = "\"[no numKeywords found]\"";
-	String numKeywordsJournal = "\"[unknown]\"";
-	String numberOfFiles = "\"[no numberOfFiles found]\"";
-	long packageSize = 0;
 	String embargoType = "none";
 	String embargoDate = "";
-	int maxDownloads = 0;
-	String numberOfDownloads = "\"[unknown]\"";
 	String manuscriptNum = null;
-	int numReadmes = 0;
 	boolean wentThroughReview = false;
 	String dateAccessioned = "\"[unknown]\"";
 	String dateIssued = "\"[unknown]\"";
@@ -132,7 +122,7 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
         } catch (SQLException e) {
 	    log.fatal("Unable to open database connection", e);
 	    return Curator.CURATE_FAIL;
-	}
+		}
 	
 	if (dso.getType() == Constants.COLLECTION) {
 	    // output headers for the CSV file that will be created by processing all items in this collection
@@ -140,207 +130,178 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 	} else if (dso.getType() == Constants.ITEM) {
             Item item = (Item)dso;
 
-	    try {
-		handle = item.getHandle();
-		log.info("handle = " + handle);
-		
-		if (handle == null) {
-		    // this item is still in workflow - no handle assigned
-		    handle = "in workflow";
-		}
-		
-		// package DOI
-		DCValue[] vals = item.getMetadata("dc.identifier");
-		if (vals.length == 0) {
-		    setResult("Object has no dc.identifier available " + handle);
-		    log.error("Skipping -- no dc.identifier available for " + handle);
-		    context.abort(); 
-		    return Curator.CURATE_SKIP;
-		} else {
-		    for(int i = 0; i < vals.length; i++) {
-			if (vals[i].value.startsWith("doi:")) {
-			    packageDOI = vals[i].value;
+		    try {
+			handle = item.getHandle();
+			log.info("handle = " + handle);
+			
+			if (handle == null) {
+			    // this item is still in workflow - no handle assigned
+			    handle = "in workflow";
 			}
-		    }
-		}
-		log.debug("packageDOI = " + packageDOI);
+		
+			// get the package DOI
+			DCValue[] vals = item.getMetadata("dc.identifier");
+			if (vals.length == 0) {
+			    setResult("Object has no dc.identifier available " + handle);
+			    log.error("Skipping -- no dc.identifier available for " + handle);
+			    context.abort(); 
+			    return Curator.CURATE_SKIP;
+			} else {
+			    for(int i = 0; i < vals.length; i++) {
+				if (vals[i].value.startsWith("doi:")) {
+				    packageDOI = vals[i].value;
+				}
+			    }
+			}
+			log.debug("packageDOI = " + packageDOI);
 
-		// article DOI
-		vals = item.getMetadata("dc.relation.isreferencedby");
-		if (vals.length == 0) {
-		    log.debug("Object has no articleDOI (dc.relation.isreferencedby) " + handle);
-		} else {
-		    articleDOI = vals[0].value;
-		}
-		log.debug("articleDOI = " + articleDOI);
+			// get the article DOI
+			vals = item.getMetadata("dc.relation.isreferencedby");
+			if (vals.length == 0) {
+			    log.debug("Object has no articleDOI (dc.relation.isreferencedby) " + handle);
+			} else {
+			    articleDOI = vals[0].value;
+			}
+			log.debug("articleDOI = " + articleDOI);
 
 		
-		// journal
-	 	vals = item.getMetadata("prism.publicationName");
-		if (vals.length == 0) {
-		    setResult("Object has no prism.publicationName available " + handle);
-		    log.error("Skipping -- Object has no prism.publicationName available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    journal = vals[0].value;
-		}
-		log.debug("journal = " + journal);
+			// get journal name
+		 	vals = item.getMetadata("prism.publicationName");
+			if (vals.length == 0) {
+			    setResult("Object has no prism.publicationName available " + handle);
+			    log.error("Skipping -- Object has no prism.publicationName available " + handle);
+			    context.abort();
+			    return Curator.CURATE_SKIP;
+			} else {
+			    journal = vals[0].value;
+			}
+			log.debug("journal = " + journal);
 
-		// journalAllowsEmbargo
-		// embargoes are allowed for all non-integrated journals
-		// embargoes are also allowed for integrated journals that have set the embargoesAllowed option
-        //use new journal utils to read the configuration from database instead of from the file
-        Scheme journalScheme = Scheme.findByIdentifier(context,"Journal");
-        Concept[] journalConcept = Concept.findByPreferredLabel(context,journal,journalScheme.getID());
+			// journalAllowsEmbargo
+			// embargoes are allowed for all non-integrated journals
+			// embargoes are also allowed for integrated journals that have set the embargoesAllowed option
+	        //use new journal utils to read the configuration from database instead of from the file
+	        Scheme journalScheme = Scheme.findByIdentifier(context,"Journal");
+	        Concept[] journalConcept = Concept.findByPreferredLabel(context,journal,journalScheme.getID());
 
+			if(journalConcept!=null&&journalConcept.length>0) {
+	            if(JournalUtils.getBooleanIntegrated(journalConcept[0])|| JournalUtils.getBooleanEmbargoAllowed(journalConcept[0])) {
+			        journalAllowsEmbargo = true;
+	            }
+			} 
 
-
-		if(journalConcept!=null&&journalConcept.length>0) {
-            if(JournalUtils.getBooleanIntegrated(journalConcept[0])|| JournalUtils.getBooleanEmbargoAllowed(journalConcept[0])) {
-		        journalAllowsEmbargo = true;
-            }
-		} 
-
-		// journalAllowsReview
-		if(journalConcept!=null&&journalConcept.length>0&&JournalUtils.getBooleanAllowReviewWorkflow(journalConcept[0])) {
-		    journalAllowsReview = true;
-		}
+			// journalAllowsReview
+			if(journalConcept!=null&&journalConcept.length>0&&JournalUtils.getBooleanAllowReviewWorkflow(journalConcept[0])) {
+			    journalAllowsReview = true;
+			}
 				
-		// accession date
-		vals = item.getMetadata("dc.date.accessioned");
-		if (vals.length == 0) {
-		    setResult("Object has no dc.date.accessioned available " + handle);
-		    log.error("Skipping -- Object has no dc.date.accessioned available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    dateAccessioned = vals[0].value;
-		}
-		log.debug("dateAccessioned = " + dateAccessioned);
-
-
-		// issued date
-		vals = item.getMetadata("dc.date.issued");
-		if (vals.length == 0) {
-		    setResult("Object has no dc.date.issued available " + handle);
-		    log.error("Skipping -- Object has no dc.date.issued available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    dateIssued = vals[0].value;
-		}
-		log.debug("dateIssued = " + dateIssued);
-
-
-
-		// wentThroughReview
-		vals = item.getMetadata("dc.description.provenance");
-		if (vals.length == 0) {
-		    log.warn("That's strange -- Object has no provenance data available " + handle);
-		} else {
-		    for(DCValue aVal : vals) {
-			if(aVal.value != null && aVal.value.contains("requiresReviewStep")) {
-			    wentThroughReview = true;
+			// accession date
+			vals = item.getMetadata("dc.date.accessioned");
+			if (vals.length == 0) {
+			    setResult("Object has no dc.date.accessioned available " + handle);
+			    log.error("Skipping -- Object has no dc.date.accessioned available " + handle);
+			    context.abort();
+			    return Curator.CURATE_SKIP;
+			} else {
+			    dateAccessioned = vals[0].value;
 			}
-		    }
-		}
-		log.debug("wentThroughReview = " + wentThroughReview);
+			log.debug("dateAccessioned = " + dateAccessioned);
 
 
-		// manuscript number
-		DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
-		manuscriptNum = null;
-		if(manuvals.length > 0) {
-		    manuscriptNum = manuvals[0].value;
-		}
-		if(manuscriptNum != null && manuscriptNum.trim().length() > 0) {
-		    log.debug("has a real manuscriptNum = " + manuscriptNum);
-		}
+			// issued date
+			vals = item.getMetadata("dc.date.issued");
+			if (vals.length == 0) {
+			    setResult("Object has no dc.date.issued available " + handle);
+			    log.error("Skipping -- Object has no dc.date.issued available " + handle);
+			    context.abort();
+			    return Curator.CURATE_SKIP;
+			} else {
+			    dateIssued = vals[0].value;
+			}
+			log.debug("dateIssued = " + dateIssued);
+
+
+			// wentThroughReview
+			vals = item.getMetadata("dc.description.provenance");
+			if (vals.length == 0) {
+			    log.warn("That's strange -- Object has no provenance data available " + handle);
+			} else {
+			    for(DCValue aVal : vals) {
+				if(aVal.value != null && aVal.value.contains("requiresReviewStep")) {
+				    wentThroughReview = true;
+				}
+			    }
+			}
+			log.debug("wentThroughReview = " + wentThroughReview);
+
+
+			// manuscript number
+			DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
+			manuscriptNum = null;
+			if(manuvals.length > 0) {
+			    manuscriptNum = manuvals[0].value;
+			}
+			if(manuscriptNum != null && manuscriptNum.trim().length() > 0) {
+			    log.debug("has a real manuscriptNum = " + manuscriptNum);
+			}
 		
-		// count the files, and compute statistics that depend on the files
-		log.debug("getting data file info");
-		DCValue[] dataFiles = item.getMetadata("dc.relation.haspart");
-		if (dataFiles.length == 0) {
-		    setResult("Object has no dc.relation.haspart available " + handle);
-		    log.error("Skipping -- Object has no dc.relation.haspart available " + handle);
-		    context.abort();
-		    return Curator.CURATE_SKIP;
-		} else {
-		    numberOfFiles = "" + dataFiles.length;
-		    packageSize = 0;
-		    
-		    // for each data file in the package
+			// count the files, and compute statistics that depend on the files
+			log.debug("getting data file info");
+			DCValue[] dataFiles = item.getMetadata("dc.relation.haspart");
+			if (dataFiles.length == 0) {
+			    setResult("Object has no dc.relation.haspart available " + handle);
+			    log.error("Skipping -- Object has no dc.relation.haspart available " + handle);
+			    context.abort();
+			    return Curator.CURATE_SKIP;
+			} else {
+			    // for each data file in the package
+			    for(int i = 0; i < dataFiles.length; i++) {
+					String fileID = dataFiles[i].value;
+					log.debug(" ======= processing fileID = " + fileID);
 
-		    for(int i = 0; i < dataFiles.length; i++) {
-			String fileID = dataFiles[i].value;
-			log.debug(" ======= processing fileID = " + fileID);
+					// get the DSpace Item for this fileID
+					Item fileItem = getDSpaceItem(fileID);
 
-			// get the DSpace Item for this fileID
-			Item fileItem = getDSpaceItem(fileID);
-
-			if(fileItem == null) {
-			    log.error("Skipping data file -- it's null");
-			    break;
-			}
-			log.debug("file internalID = " + fileItem.getID());
-
-			
-			// embargo setting (of last file processed)
-			vals = fileItem.getMetadata("dc.type.embargo");
-			if (vals.length > 0) {
-			    embargoType = vals[0].value;
-			    log.debug("EMBARGO vals " + vals.length + " type " + embargoType);
-			}
-			vals = fileItem.getMetadata("dc.date.embargoedUntil");
-			if (vals.length > 0) {
-			    embargoDate = vals[0].value;
-			}
-			if((embargoType == null || embargoType.equals("") || embargoType.equals("none")) &&
-			   (embargoDate != null && !embargoDate.equals(""))) {
-			    // correctly encode embago type to "oneyear" if there is a date set, but the type is blank or none
-			    embargoType = "oneyear";
-			}
-			log.debug("embargoType = " + embargoType);
-			log.debug("embargoDate = " + embargoDate);
-			
-		       			    			
-			// number of downlaods for most downloaded file
-			// must use the DSpace item ID, since the solr stats system is based on this ID
-			// The SOLR address is hardcoded to the production system here, because even when we run on test servers,
-			// it's easiest to use the real stats --the test servers typically don't have useful stats available
-			URL downloadStatURL = new URL("http://datadryad.org/solr/statistics/select/?indent=on&q=owningItem:" + fileItem.getID());
-			log.debug("fetching " + downloadStatURL);
-			Document statsdoc = docb.parse(downloadStatURL.openStream());
-			NodeList nl = statsdoc.getElementsByTagName("result");
-			String downloadsAtt = nl.item(0).getAttributes().getNamedItem("numFound").getTextContent();
-			int currDownloads = Integer.parseInt(downloadsAtt);
-			if(currDownloads > maxDownloads) {
-			    maxDownloads = currDownloads;
-			    // rather than converting maxDownloads back to a string, just use the string we parsed above
-			    numberOfDownloads = downloadsAtt;
-			}
-			log.debug("max downloads (as of file " + fileID + ") = " + numberOfDownloads);
-			
+					if(fileItem == null) {
+					    log.error("Skipping data file -- it's null");
+					    break;
+					}
+					log.debug("file internalID = " + fileItem.getID());
+				
+					// embargo setting (of last file processed)
+					vals = fileItem.getMetadata("dc.type.embargo");
+					if (vals.length > 0) {
+					    embargoType = vals[0].value;
+					    log.debug("EMBARGO vals " + vals.length + " type " + embargoType);
+					}
+					vals = fileItem.getMetadata("dc.date.embargoedUntil");
+					if (vals.length > 0) {
+					    embargoDate = vals[0].value;
+					}
+					if((embargoType == null || embargoType.equals("") || embargoType.equals("none")) &&
+					   (embargoDate != null && !embargoDate.equals(""))) {
+					    // correctly encode embago type to "oneyear" if there is a date set, but the type is blank or none
+					    embargoType = "oneyear";
+					}
+					log.debug("embargoType = " + embargoType);
+					log.debug("embargoDate = " + embargoDate);			
 		    }
 
 		}
 		log.info(handle + " done.");
 	    } catch (Exception e) {
-		log.fatal("Skipping -- Exception in processing " + handle, e);
-		setResult("Object has a fatal error: " + handle + "\n" + e.getMessage());
-		report("Object has a fatal error: " + handle + "\n" + e.getMessage());
-		
-		context.abort();
-		return Curator.CURATE_SKIP;
+			log.fatal("Skipping -- Exception in processing " + handle, e);
+			setResult("Object has a fatal error: " + handle + "\n" + e.getMessage());
+			report("Object has a fatal error: " + handle + "\n" + e.getMessage());			
+			context.abort();
+			return Curator.CURATE_SKIP;
 	    }
 	} else {
 	    log.info("Skipping -- non-item DSpace object");
 	    setResult("Object skipped (not an item)");
-
 	    context.abort();
 	    return Curator.CURATE_SKIP;
-        }
+    }
 
 	setResult("Last processed item = " + handle + " -- " + packageDOI);
 	report(handle + "," + packageDOI + "," + articleDOI + "," + journal + "," + journalAllowsEmbargo + "," + journalAllowsReview + "," + embargoType + "," + embargoDate + "," + manuscriptNum + "," + wentThroughReview + "," + dateAccessioned + "," + dateIssued);
