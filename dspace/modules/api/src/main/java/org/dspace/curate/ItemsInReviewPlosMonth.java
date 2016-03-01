@@ -1,4 +1,7 @@
 /**
+ * 
+ * /opt/dryad/bin/dspace curate -v -t itemsinreviewplosmonth -i 10255/3 -r - >~/temp/itemsinreviewplosmonth.csv
+ * 
  * The contents of this file are subject to the license and copyright
  * detailed in the LICENSE and NOTICE files at the root of the source
  * tree and available online at
@@ -7,15 +10,16 @@
  */
 package org.dspace.curate;
 
-import java.util.Date;
+import java.lang.Math;
 import java.text.DateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DSpaceObject;
@@ -58,7 +62,38 @@ public class ItemsInReviewPlosMonth extends AbstractCurationTask {
             log.fatal("Cannot initialize database connection", e);
         }
     }
-        
+    
+
+    /**
+     * returns the number of days between one date and secondDate, which
+     * is passed in
+     */
+    public static int numDaysBetween(Date firstDate, Date secondDate) {
+
+        long firstDateMS = firstDate.getTime();
+        long secondDateMS = secondDate.getTime();
+
+        long timeBetweenDatesMS = Math.abs(firstDateMS - secondDateMS);
+        long daysBetweenDates = timeBetweenDatesMS / (24 * 60 * 60 * 1000);
+        return (int) daysBetweenDates;
+    }
+
+
+ /**
+     * returns the number of days between one date and secondDate, which
+     * is passed in
+     */
+    public static int numDaysBetweenDates(Date firstDate, Date secondDate) {
+
+        long firstDateMS = firstDate.getTime();
+        long secondDateMS = secondDate.getTime();
+
+        long timeBetweenDatesMS = Math.abs(firstDateMS - secondDateMS);
+        long daysBetweenDates = timeBetweenDatesMS / (24 * 60 * 60 * 1000);
+        return (int) daysBetweenDates;
+    }
+
+
     
     /**
        Perform 
@@ -98,11 +133,13 @@ public class ItemsInReviewPlosMonth extends AbstractCurationTask {
 
                         String publicationName = dataPackage.getPublicationName();
                         if (publicationName.toLowerCase().contains(PUBNAME)) {
+                            Date todaysDate = new Date();
                             Date lastModificationDate = dataPackage.getItem().getLastModified();
-                            //if lastModificationDate {
+                            int daysSincePlacedInReview = numDaysBetweenDates(todaysDate, lastModificationDate)
+                            if daysSincePlacedInReview > 30 {
                                 int itemID = dataPackage.getItem().getID();
                                 report(itemID + ", " + publicationName + ", " + lastModificationDate);
-                            //}
+                            }
                         }
                     }
                 }
