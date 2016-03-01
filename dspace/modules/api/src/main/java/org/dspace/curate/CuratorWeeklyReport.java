@@ -247,15 +247,6 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 		}
 		log.debug("wentThroughReview = " + wentThroughReview);
 
-		
-		// number of keywords
-		int intNumKeywords = item.getMetadata("dc.subject").length +
-		    item.getMetadata("dwc.ScientificName").length +
-		    item.getMetadata("dc.coverage.temporal").length +
-		    item.getMetadata("dc.coverage.spatial").length;
-
-		numKeywords = "" + intNumKeywords; //convert integer to string by appending
-		log.debug("numKeywords = " + numKeywords);
 
 		// manuscript number
 		DCValue[] manuvals = item.getMetadata("dc.identifier.manuscriptNumber");
@@ -265,9 +256,7 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 		}
 		if(manuscriptNum != null && manuscriptNum.trim().length() > 0) {
 		    log.debug("has a real manuscriptNum = " + manuscriptNum);
-
 		}
-
 
 		
 		// count the files, and compute statistics that depend on the files
@@ -296,34 +285,6 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 			    break;
 			}
 			log.debug("file internalID = " + fileItem.getID());
-			
-			// total package size
-			// add total size of the bitstreams in this data file 
-			// to the cumulative total for the package
-			// (includes metadata, readme, and textual conversions for indexing)
-			for (Bundle bn : fileItem.getBundles()) {
-			    for (Bitstream bs : bn.getBitstreams()) {
-				packageSize = packageSize + bs.getSize();
-			    }
-			}
-			log.debug("total package size (as of file " + fileID + ") = " + packageSize);
-
-			// Readmes
-			// Check for at least one readme bitstream. There may be more, due to indexing and cases
-			// where the file itself is named readme. We only count one readme per datafile.
-			boolean readmeFound = false;
-			for (Bundle bn : fileItem.getBundles()) {
-			    for (Bitstream bs : bn.getBitstreams()) {
-				String name = bs.getName().trim().toLowerCase();
-				if(name.startsWith("readme")) {
-				    readmeFound = true;
-				}
-			    }
-			}
-			if(readmeFound) {
-			    numReadmes++;
-			}
-			log.debug("total readmes (as of file " + fileID + ") = " + numReadmes);
 
 			
 			// embargo setting (of last file processed)
