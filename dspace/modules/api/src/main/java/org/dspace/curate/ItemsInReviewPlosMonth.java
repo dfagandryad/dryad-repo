@@ -135,7 +135,7 @@ public class ItemsInReviewPlosMonth extends AbstractCurationTask {
                         if (publicationName.toLowerCase().contains(PUBNAME)) {
                             Date todaysDate = new Date();
                             Date lastModificationDate = dataPackage.getItem().getLastModified();
-                            int daysSincePlacedInReview = numDaysBetweenDates(todaysDate, lastModificationDate)
+                            int daysSincePlacedInReview = numDaysBetweenDates(todaysDate, lastModificationDate);
                             if daysSincePlacedInReview > 30 {
                                 int itemID = dataPackage.getItem().getID();
                                 report(itemID + ", " + publicationName + ", " + lastModificationDate);
