@@ -257,7 +257,6 @@ public class CuratorWeeklyReport extends AbstractCurationTask {
 		if(manuscriptNum != null && manuscriptNum.trim().length() > 0) {
 		    log.debug("has a real manuscriptNum = " + manuscriptNum);
 		}
-
 		
 		// count the files, and compute statistics that depend on the files
 		log.debug("getting data file info");
