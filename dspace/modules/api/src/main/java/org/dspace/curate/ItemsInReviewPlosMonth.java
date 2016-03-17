@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
  * information about the PLOS data packages that have been in review longer than
  * one month
  *
- * @author Debra Fagan/Ryan Scherle
+ * @author Debra Fagan / Ryan Scherle
  */
 @Distributive
 public class ItemsInReviewPlosMonth extends AbstractCurationTask {
