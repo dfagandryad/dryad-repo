@@ -39,6 +39,7 @@ import org.apache.log4j.Logger;
  * ItemsInReviewPlosMonth reports on the status of items in the review workflow.
  *
  * The task succeeds if it was able to calculate the correct result.
+ * Last Update: 2016-03-17
  *
  * Input: a collection (any collection)
  * Output: a CSV indicating simple information about the data packages that are in review
@@ -101,7 +102,8 @@ public class ItemsInReviewPlosMonth extends AbstractCurationTask {
     @Override
     public int perform(DSpaceObject dso) throws IOException {
     
-    String PUBNAME = "plosone";
+    public static final int MAXDAYS = 30;
+    public static final String PUBNAME = "plosone";
 
     try {
         
@@ -136,7 +138,7 @@ public class ItemsInReviewPlosMonth extends AbstractCurationTask {
                             Date todaysDate = new Date();
                             Date lastModificationDate = dataPackage.getItem().getLastModified();
                             int daysSincePlacedInReview = numDaysBetweenDates(todaysDate, lastModificationDate);
-                            if (daysSincePlacedInReview >= 30) {
+                            if (daysSincePlacedInReview >= MAXDAYS) {
                                 int itemID = dataPackage.getItem().getID();
                                 report(itemID + ", " + publicationName + ", " + lastModificationDate);
                             }
