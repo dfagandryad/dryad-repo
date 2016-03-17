@@ -52,6 +52,8 @@ public class ItemsInReviewPlosMonth extends AbstractCurationTask {
     private static Logger log = Logger.getLogger(FileSimpleStats.class);
     private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
     Context context;
+    public static final int MAXDAYS = 30;
+    public static final String PUBNAME = "plosone";
 
     @Override 
     public void init(Curator curator, String taskId) throws IOException {
@@ -102,8 +104,6 @@ public class ItemsInReviewPlosMonth extends AbstractCurationTask {
     @Override
     public int perform(DSpaceObject dso) throws IOException {
     
-    public static final int MAXDAYS = 30;
-    public static final String PUBNAME = "plosone";
 
     try {
         
