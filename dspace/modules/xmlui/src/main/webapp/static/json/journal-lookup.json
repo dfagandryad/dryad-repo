@@ -7,7 +7,7 @@
         "hidden" : "Y",
         "integrated" : "Y",
         "title" : "American Journal of Botany",
-        "sponsor" : "The Botanical Society of America"
+        "sponsor" : "$120"
      },
      {
         "title" : "American Naturalist, The",
@@ -25,7 +25,7 @@
         "submission" : "A",
         "hidden" : "Y",
         "title" : "Applications in Plant Sciences",
-        "sponsor" : "The Botanical Society of America"
+        "sponsor" : "$120"
      },
      {
         "title" : "Behavioral Ecology",
@@ -746,15 +746,6 @@
         "hidden" : "Y",
         "title" : "Plant Physiology",
         "sponsor" : "American Society of Plant Biologists"
-     },
-     {
-        "hidden" : "Y",
-        "submission" : "A",
-        "issn" : "0032-0919",
-        "embargo" : "Y",
-        "integrated" : "N",
-        "sponsor" : "The Botanical Society of America",
-        "title" : "Plant Science Bulletin"
      },
      {
         "sponsor" : "$120",
