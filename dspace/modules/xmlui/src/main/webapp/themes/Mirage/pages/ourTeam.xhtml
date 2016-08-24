@@ -1,152 +1,165 @@
 <html>
-  <head> <title>Our Team</title>
-   <style type="text/css">
-          div#ds-body { margin: 0px 0px 0px 0px;padding-right: 10px; top: 165px;}
-          /* Defns for the BoD bio list
-           */
-           div.bioBlock{
-              position:relative;
-              display:inline-block;
-              margin: 0.5em 0em 0.5em 0em;
-           }
-           div.bioImage{
-               float:left;
-               display:inline;
-               padding-right:2%;
-           }
-           div.bioText{
-               float:left;
-               display:inline;
-               width:70%;
-           }   
-   </style></head>
-  <body>
-  <div id="ds-body">
-    <h1 class="ds-div-head">Our team</h1>
-    <div class="ds-static-div primary">
-    <h2>Dryad staff</h2>
-	<p>Our staff apply their backgrounds in scientific research, libraries, non-profits, publishing and computer science in support of open data infrastructure and the future of knowledge.</p>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/mmorovati.jpg" alt="Meredith Morovati" />
-      </div>
-      <div class="bioText">
-        <strong>Meredith Morovati</strong>, Executive Director<br />
-		<a href="mailto:director@datadryad.org">director@datadryad.org</a>
-      </div>
-    </div>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/eclary.jpg" alt="Erin Clary" />
-      </div>
-      <div class="bioText">
-        <strong>Erin Clary</strong>, Senior Curator<br />
-		<a href="mailto:curator@datadryad.org">curator@datadryad.org</a>
-      </div>
-    </div>
 
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/dfagan.jpg" alt="Debra Fagan" />
-      </div>
-      <div class="bioText">
-        <strong>Debra Fagan</strong>, Curation and Technical Specialist
-      </div>
-    </div>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/dhuang.jpg" alt="Daisie Huang" />
-      </div>
-      <div class="bioText">
-        <strong><a href="http://www.daisieirishuang.com/">Daisie Huang</a></strong>, Software Developer
-      </div>
-    </div>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/ehull.jpg" alt="Elizabeth Hull" />
-      </div>
-      <div class="bioText">
-        <strong>Elizabeth Hull</strong>, Operations Manager
-      </div>
-    </div>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/rkameny.jpg" alt="Rebecca Kameny" />
-      </div>
-      <div class="bioText">
-        <strong>Rebecca Kameny</strong>, Curator
-      </div>
-    </div>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/rscherle.jpg" alt="Ryan Scherle" />
-      </div>
-      <div class="bioText">
-        <strong><a href="http://ryan.scherle.org">Ryan Scherle</a></strong>, Repository Architect
-      </div>
-    </div>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/sstewart.jpg" alt="Shavon Stewart" />
-      </div>
-      <div class="bioText">
-        <strong>Shavon Stewart</strong>, Curator
-      </div>
-    </div>
-	
-    <div class="bioBlock">
-      <div class="bioImage">
-        <img src="/themes/Mirage/images/staff/ryaxley.jpg" alt="Rich Yaxley" />
-      </div>
-      <div class="bioText">
-        <strong>Rich Yaxley</strong>, Curator
-      </div>
-    </div>
+<head>
+    <title>Our Team</title>
+    <style type="text/css">
 
-  <h2>Other personnel</h2>
-    <p>
-      <h3>Principal Investigators</h3>
-	      <p>Project: National Science Foundation <a href="http://www.nsf.gov/awardsearch/showAward?AWD_ID=1612608">DBI-1612608</a>  "Scalable and sustainable infrastructure for the publication of data"</p>
-	      <ul>
-		    <li><strong>Todd Vision</strong>, Department of Biology, University of North Carolina at Chapel Hill</li>
-	<li><strong>Hilary Davis</strong>, Interim Head of Collection Management and Director of Research Data Services, North Carolina State University</li>
-	      </ul>
-    </p>
-	<p>
-      <h3>Board of Directors</h3>
-	      <ul>
-		    <li>For our current Board of Directors membership, see <a href="/pages/organization#governance">Governance</a></li>
-	      </ul>
-    </p>
-    <p>
-      <h3>Other current contributors</h3>
-      <ul>
-        <li><a href="http://atmire.com/website/">@mire</a>, DSpace development</li>
-      </ul>
-    </p>
-    <p>For past contributors see <a href="http://wiki.datadryad.org/Participants#Alumni">Dryad Alumni</a>.</p>
-  
-  </div>
-</div>
+        div#ds-body {
+            margin: 0px 0px 0px 0px;
+            padding-right: 10px;
+            top: 165px;
+        }
+        /* Defns for the team bio list*/
+        
+        div.bioBlock {
+            position: relative;
+            display: inline-block;
+            margin: 0.5em 0em 0.5em 0em;
+        }
+        
+        div.bioImage {
+            float: left;
+            display: inline;
+            padding-right: 2%;
+        }
+        
+        div.bioText {
+            float: left;
+            display: inline;
+            width: 70%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ds-body">
+        <!--    <h1 class="ds-div-head">Our team</h1>-->
+        <div id="board" class="tab-panel">
+        <div class="ds-static-div primary">
+            <h2>Our team: Dryad staff</h2>
+            <p>Our staff apply their backgrounds in scientific research, libraries, non-profits, publishing and computer science in support of open data infrastructure and the future of knowledge.</p>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/mmorovati.jpg" alt="Meredith Morovati" />
+                </div>
+                <div class="bioText">
+                    <strong>Meredith Morovati</strong>, Executive Director<br />
+                    <a href="mailto:director@datadryad.org">director@datadryad.org</a>
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/eclary.jpg" alt="Erin Clary" />
+                </div>
+                <div class="bioText">
+                    <strong>Erin Clary</strong>, Senior Curator<br />
+                    <a href="mailto:curator@datadryad.org">curator@datadryad.org</a>
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/dfagan.jpg" alt="Debra Fagan" />
+                </div>
+                <div class="bioText">
+                    <strong>Debra Fagan</strong>, Curation and Technical Specialist
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/dhuang.jpg" alt="Daisie Huang" />
+                </div>
+                <div class="bioText">
+                    <strong><a href="http://www.daisieirishuang.com/">Daisie Huang</a></strong>, Software Developer
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/ehull.jpg" alt="Elizabeth Hull" />
+                </div>
+                <div class="bioText">
+                    <strong>Elizabeth Hull</strong>, Operations Manager
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/rkameny.jpg" alt="Rebecca Kameny" />
+                </div>
+                <div class="bioText">
+                    <strong>Rebecca Kameny</strong>, Curator
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/rscherle.jpg" alt="Ryan Scherle" />
+                </div>
+                <div class="bioText">
+                    <strong><a href="http://ryan.scherle.org">Ryan Scherle</a></strong>, Repository Architect
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/sstewart.jpg" alt="Shavon Stewart" />
+                </div>
+                <div class="bioText">
+                    <strong>Shavon Stewart</strong>, Curator
+                </div>
+            </div>
+
+            <div class="bioBlock">
+                <div class="bioImage">
+                    <img src="/themes/Mirage/images/staff/ryaxley.jpg" alt="Rich Yaxley" />
+                </div>
+                <div class="bioText">
+                    <strong>Rich Yaxley</strong>, Curator
+                </div>
+            </div>
+
+            <h2>Other personnel</h2>
+            <p>
+                <h3>Principal Investigators</h3>
+                <p>Project: National Science Foundation <a href="http://www.nsf.gov/awardsearch/showAward?AWD_ID=1612608">DBI-1612608</a> "Scalable and sustainable infrastructure for the publication of data"</p>
+                <ul>
+                    <li><strong>Todd Vision</strong>, Department of Biology, University of North Carolina at Chapel Hill</li>
+                    <li><strong>Hilary Davis</strong>, Interim Head of Collection Management and Director of Research Data Services, North Carolina State University</li>
+                </ul>
+            </p>
+            <p>
+                <h3>Board of Directors</h3>
+                <ul>
+                    <li>For our current Board of Directors membership, see <a href="/pages/organization#governance">Governance</a></li>
+                </ul>
+            </p>
+            <p>
+                <h3>Other current contributors</h3>
+                <ul>
+                    <li><a href="http://atmire.com/website/">@mire</a>, DSpace development</li>
+                </ul>
+            </p>
+            <p>For past contributors see <a href="http://wiki.datadryad.org/Participants#Alumni">Dryad Alumni</a>.</p>
+
+        </div>
+    </div>
 
     <div class="page-license">
-      <p>
-        All text on this page is available under a 
-        <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC-BY 3.0 license.
+        <p>
+            All text on this page is available under a
+            <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC-BY 3.0 license.
           <img src="/themes/Mirage/images/cc-by.png" alt="CC-BY 3.0 icon" />
           <span class="accessibly-hidden">(opens in a new window)</span>
-        </a>             
-      </p>
-    </div>  
+        </a>
+        </p>
+    </div>
 
     <div>Last revised: 2016-8-18</div>
-  </div>
-  </body>
+    </div>
+</body>
+
 </html>
