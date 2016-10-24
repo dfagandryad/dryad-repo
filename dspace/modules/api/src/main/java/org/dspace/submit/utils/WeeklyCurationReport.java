@@ -414,7 +414,7 @@ public class WeeklyCurationReport{
 				Email email = ConfigurationManager.getEmail(I18nUtil.getEmailFilename(myContext.getCurrentLocale(), "WeeklySummaryReport"));;
 				
 				//add recipient
-				String recipent = "yyhao1@gmail.com";
+				String recipent = "dafagan2@gmail.com";
 				email.addRecipient(recipent);
 				
 				//set subject
