@@ -115,10 +115,9 @@ public class WorkflowEmailManager {
 
 
             /* begin DF */
-            String journal = "";
-            DCValue[] values=item.getMetadata("prism.publicationName");
-            if (values!=null && values.length> 0) {
-                journal = values[0].value;
+
+
+            String journal = "Journal Name";
 
             /* end DF */
 
