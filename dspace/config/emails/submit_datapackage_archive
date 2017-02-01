@@ -11,6 +11,7 @@
 # {5}  The manuscript identifier (or "none available" if the metadata doesn't contain one)
 # {6}  The formatted dx.doi.org URL
 #
+#
 Subject: Dryad submission approved {1}
 
 Dear {4},
