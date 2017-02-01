@@ -117,7 +117,7 @@ public class WorkflowEmailManager {
             /* begin DF */
 
 
-            String journal = "Journal Name";
+            String journalName = "Journal Name";
 
             /* end DF */
 
@@ -132,9 +132,7 @@ public class WorkflowEmailManager {
             email.addArgument(submitter);             // {4}  The submitter's full name
             email.addArgument(manuscriptIdentifier);  // {5}  The manuscript identifier (or "none available" if the metadata doesn't contain one)
             email.addArgument(doi_url);               // {6}  The formatted dx.doi.org URL
-            /* begin DF */
-            email.addArgument(journal);               // {7}  The journal name
-            /* end DF */
+            email.addArgument(journalName);           // {7}  The journal name
             email.send();
         }
         catch (MessagingException e) {
