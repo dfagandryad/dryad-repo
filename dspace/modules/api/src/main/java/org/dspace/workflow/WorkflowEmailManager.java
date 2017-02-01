@@ -113,6 +113,16 @@ public class WorkflowEmailManager {
                 manuscriptIdentifier = "none available";
             }
 
+
+            /* begin DF */
+            String journal = "";
+            DCValue[] values=item.getMetadata("prism.publicationName");
+            if (values!=null && values.length> 0) {
+                journal = values[0].value;
+
+            /* end DF */
+
+
             // add a DOI URL as well:
             String doi_url = DOIIdentifierProvider.getFullDOIURL(i);
 
@@ -123,6 +133,9 @@ public class WorkflowEmailManager {
             email.addArgument(submitter);             // {4}  The submitter's full name
             email.addArgument(manuscriptIdentifier);  // {5}  The manuscript identifier (or "none available" if the metadata doesn't contain one)
             email.addArgument(doi_url);               // {6}  The formatted dx.doi.org URL
+            /* begin DF */
+            email.addArgument(journal);               // {7}  The journal name
+            /* end DF */
             email.send();
         }
         catch (MessagingException e) {
