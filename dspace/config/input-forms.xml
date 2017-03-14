@@ -226,7 +226,7 @@
                     <dc-element>contributor</dc-element>
                     <dc-qualifier>correspondingAuthor</dc-qualifier>
                     <repeatable>false</repeatable>
-                    <label>Primary contact for data associated with this article</label>
+                    <label>Primary contact for data associated with this article (use author format)</label>
                     <input-type>onebox</input-type>
                     <hint></hint>
                 </field>
