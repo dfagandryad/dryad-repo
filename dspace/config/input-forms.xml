@@ -236,7 +236,7 @@
                     <dc-schema>dwc</dc-schema>
                     <dc-element>ScientificName</dc-element>
                     <repeatable>true</repeatable>
-                    <label>Taxonomic names</label>
+                    <label>Taxonomic names (e.g., Thalassia hemprichii, Panthera pardus)</label>
                     <input-type>onebox</input-type>
                     <hint>Please enter taxonomic names associated with the publication. These may be names at any level (species or higher-level clade). Names may be added individ$
                       &lt;ul&gt;&lt;li&gt;Drosophila melanogaster&lt;/li&gt;&lt;li&gt;Geospizinae&lt;/li&gt;&lt;li&gt;Elaeis guineensis&lt;/li&gt;&lt;/ul&gt;
