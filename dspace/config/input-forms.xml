@@ -71,10 +71,7 @@
                     <dc-element>readme</dc-element>
                     <label>ReadMe file</label>
                     <input-type>file</input-type>
-                    <hint>If additional user guidance is needed, please upload a ReadMe file. ReadMe files supplement 
-                        the file description and should provide any information needed to ensure that the data can be 
-                        correctly interpreted. If your ReadMe pertains to your data package as a whole, please upload 
-                        it with each individual data file. View additional ReadMe guidance.
+                    <hint>If additional user guidance is needed (e.g., codebook, definitions of variables or codes, de-identification methods), please upload a ReadMe file. See more information at http://datadryad.org/pages/readme.
                     </hint>
                 </field>
                 <field>
