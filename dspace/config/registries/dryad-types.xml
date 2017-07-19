@@ -30,6 +30,10 @@
     </dc-type>
     <dc-type>
         <schema>dryad</schema>
+        <element>curatorNoteInternal</element>
+    </dc-type>
+    <dc-type>
+        <schema>dryad</schema>
         <element>citationInProgress</element>
     </dc-type>
     <dc-type>
