@@ -3393,7 +3393,7 @@
 
     
     <!-- Publisher Membership: Annual Revenue -->
-        <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_annual_revenue.label1">2. Membership level - Publisher<span class="required-mark">*</span></message>
+    <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_annual_revenue.label1">2. Membership level - Publisher<span class="required-mark">*</span></message>
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_annual_revenue.label2">Please specify currency.</message>
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.errors.org_annual_revenue_currency">Currency selection is required</message>
 
@@ -3406,7 +3406,7 @@
 
     
     <!-- Institutional Membership: Size -->
-        <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.label1">2. Membership level - Institution<span class="required-mark">*</span></message>
+    <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.label1">2. Membership level - Institution<span class="required-mark">*</span></message>
 
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.errors.org_inst_size_currency">Currency selection is required</message>
 
@@ -3414,6 +3414,9 @@
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.inst_level3"><span class="msg-inst_level3"><b>Level III</b>: annual membership dues $13,000</span></message>
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.inst_level2"><span class="msg-inst_level2"><b>Level II</b>: annual membership dues $7,500</span></message>
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.inst_level1"><span class="msg-inst_level1"><b>Level I</b>: annual membership dues $3,000</span></message>
+    <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.inst_level1"><span class="msg-inst_level1"><b>Other</b> (leave comment below)</span></message>
+
+
     
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.errors.org_annual_revenue">Membership level is required, either for publisher or institution</message>
 
