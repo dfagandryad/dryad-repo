@@ -3372,7 +3372,7 @@
 	<tr><td>Level 1</td><td>R3 or FTE under 5K or less than $50M in research grant funding.</td></tr>
 	<tr><td>Level II</td><td>R2 or FTE 5K - 10K or  $50M - $300M in research grant funding.</td></tr>
 	<tr><td>Level III</td><td>RI or FTE +10K FTE or +$300M in research grant funding.</td></tr>
-	<tr><td>Level IV</td><td>Other (leave comment below).</td></tr>
+
       </table>
     </message>
     
@@ -3419,9 +3419,7 @@
     
     <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.inst_level1">
     <span class="msg-inst_level1"><b>Level I</b>: annual membership dues $3,000</span></message>
-    
-    <message key="xmlui.DryadFeedback.MembershipApplicationForm.fields.org_inst_size.inst_levelo">
-    <span class="msg-inst_levelo"><b>Other</b> (leave comment below)</span></message>
+
 
 
     
