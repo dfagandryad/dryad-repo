@@ -1,24 +1,21 @@
-
 /* JS behaviors for all Dryad pages */
 jQuery(document).ready(function() {
-    var modal =jQuery("#aspect_eperson_TermsOfService_div_modal-content").val();
-    if(modal === undefined)
-    {
+    var modal = jQuery("#aspect_eperson_TermsOfService_div_modal-content").val();
+    if (modal === undefined) {
 
-    }
-    else{
+    } else {
         initTermsOfService();
     }
 
     jQuery('.label-mark').tooltip();
-    if(jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').length>0){
+    if (jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').length > 0) {
         shoeShoppingCartWaiver(null);
     }
-    jQuery('#aspect_submission_workflow_WorkflowTransformer_field_skip_payment').css('display','none');
-    jQuery('#aspect_submission_submit_CheckoutStep_field_skip_payment').css('display','none');
+    jQuery('#aspect_submission_workflow_WorkflowTransformer_field_skip_payment').css('display', 'none');
+    jQuery('#aspect_submission_submit_CheckoutStep_field_skip_payment').css('display', 'none');
     //if there is error in generate the paypal form or payment is 0 enable the skip button
     var showButton = jQuery('input[name=show_button]');
-    if(showButton!='undefined'&&showButton!=null&&showButton.length>0){
+    if (showButton != 'undefined' && showButton != null && showButton.length > 0) {
         var buttonId = "#aspect_submission_submit_CheckoutStep_field_skip_payment";
         jQuery(buttonId).show();
         jQuery(buttonId).val(showButton.val());
@@ -27,16 +24,14 @@ jQuery(document).ready(function() {
         jQuery(buttonId).val(showButton.val());
     }
 
-
-
-/* If the page has separate sidebar boxes, try to align the topmost
-* box with the first topmost element on the page, preferably:
-*  > a button-bar for intra-page navigation
-*  > a main page title
-*  > a publication-header box
-*  > a featured image
-*  > or any .primary box
-*/
+    /* If the page has separate sidebar boxes, try to align the topmost
+     * box with the first topmost element on the page, preferably:
+     *  > a button-bar for intra-page navigation
+     *  > a main page title
+     *  > a publication-header box
+     *  > a featured image
+     *  > or any .primary box
+     */
     var topMainPageElement = jQuery('#ds-body .tab-buttons, #ds-body h1, #ds-body .publication-header, #ds-body .featured-image, #ds-body .primary').eq(0);
     var topSidebarBox = jQuery('#ds-options .simple-box:eq(0)');
     if (topMainPageElement.length && topSidebarBox.length) {
@@ -44,18 +39,18 @@ jQuery(document).ready(function() {
         var sidebarBoxTop = topSidebarBox.offset().top;
         var boxNudge = mainPageTop - sidebarBoxTop;
         // ASSUMES that #ds-option has no padding-top!
-        jQuery('#ds-options').css('padding-top', boxNudge+"px");
+        jQuery('#ds-options').css('padding-top', boxNudge + "px");
     }
 
-    jQuery('span.field-help').each(function(entry){
+    jQuery('span.field-help').each(function(entry) {
         jQuery(jQuery('span.field-help')[entry]).html(jQuery(jQuery('span.field-help')[entry]).text());
     });
 
-    if(document.URL.indexOf("#advanced")<0){
+    if (document.URL.indexOf("#advanced") < 0) {
         jQuery("#aspect_discovery_SimpleSearch_item_search-filter-list").hide();
     }
 
-    jQuery("#advanced-search").click(function(){
+    jQuery("#advanced-search").click(function() {
         jQuery("#aspect_discovery_SimpleSearch_item_search-filter-list").toggle();
     });
 
@@ -74,30 +69,27 @@ jQuery(document).ready(function() {
                 opacity: 'show'
             },
             speed: 0,
-            disableHI: true     // remove menu delay (from hoverIntent)
+            disableHI: true // remove menu delay (from hoverIntent)
         })
         .supposition();
 
     // General support for simple tabs (styled as buttons)
     // NOTE: This logic supports multiple sets of tabs on a page.
     // NOTE: For now, we're only using this on the Home page!
-    if (jQuery('#aspect_discovery_RecentlyAdded_div_Home').length === 1)
-    {
+    if (jQuery('#aspect_discovery_RecentlyAdded_div_Home').length === 1) {
         var jQuerytabButtons = jQuery('.tab-buttons a');
         jQuerytabButtons.unbind('click').click(function() {
 
             //if click on browse by author or journal redirect
-            if(jQuery(this).attr('href').indexOf("#by_")>=0)
-            {
-                var url ="/search-filter?query=&field=dc.contributor.author_filter&fq=location:l2";
-                $(location).attr('href',url);
+            if (jQuery(this).attr('href').indexOf("#by_") >= 0) {
+                var url = "/search-filter?query=&field=dc.contributor.author_filter&fq=location:l2";
+                $(location).attr('href', url);
             }
 
             //if click on browse by author or journal redirect
-            if(jQuery(this).attr('href').indexOf("#by_journal")>=0)
-            {
-                var url ="/search-filter?query=&field=prism.publicationName_filter&fq=location:l2";
-                $(location).attr('href',url);
+            if (jQuery(this).attr('href').indexOf("#by_journal") >= 0) {
+                var url = "/search-filter?query=&field=prism.publicationName_filter&fq=location:l2";
+                $(location).attr('href', url);
             }
 
             // highlight this button and show its panel
@@ -113,19 +105,14 @@ jQuery(document).ready(function() {
             return false;
         });
         // CLick the first (default) tab in each set
-        if(document.URL.indexOf("dc.contributor.author_filter")>=0||jQuery(".choose_browse_by").html()=="dc.contributor.author_filter")
-        {
+        if (document.URL.indexOf("dc.contributor.author_filter") >= 0 || jQuery(".choose_browse_by").html() == "dc.contributor.author_filter") {
             jQuery('#by_author').click();
             window.location.href = '#by_author';
 
-        }
-        else if(document.URL.indexOf("prism.publicationName_filter")>=0||jQuery(".choose_browse_by").html()=="prism.publicationName_filter")
-        {
+        } else if (document.URL.indexOf("prism.publicationName_filter") >= 0 || jQuery(".choose_browse_by").html() == "prism.publicationName_filter") {
             jQuery('#by_journal').click();
             window.location.href = '#by_journal';
-        }
-        else
-        {
+        } else {
             jQuery('.tab-buttons a:first-child').click();
         }
 
@@ -143,15 +130,13 @@ jQuery(document).ready(function() {
         });
         return false;
     };
-    if (jQuery('#aspect_journal_landing_JournalStats_div_journal-landing-banner-outer').length === 1)
-    {
+    if (jQuery('#aspect_journal_landing_JournalStats_div_journal-landing-banner-outer').length === 1) {
         // enable only first tab, as the others are populated asynchronously
-        jQuery('.tab-buttons a').first().unbind('click').click(tabClickFunction);        
+        jQuery('.tab-buttons a').first().unbind('click').click(tabClickFunction);
     }
-    
+
     // fill downloads tabs
-    jQuery('.download-query').each(function() 
-    {
+    jQuery('.download-query').each(function() {
         var $elt = $(this);
         var url = $elt.attr('data-download');
         var $button = jQuery('a[href="#' + $elt.attr('id') + '"]');
@@ -172,9 +157,9 @@ jQuery(document).ready(function() {
         };
         jQuery.ajax({
             dataType: 'text',
-            url:      url,
-            success:  updateTabSuccess,
-            error:    updateTabError
+            url: url,
+            success: updateTabSuccess,
+            error: updateTabError
         });
     });
 
@@ -186,15 +171,15 @@ jQuery(document).ready(function() {
     // By default, this is based on today's date. Upcoming slides can be previewed using the browser's query-string:
     //   EXAMPLE: http://www.datadryad.org/?date=2013-06-02
     // NOTE that the date is in the format YEAR-MONTH-DAY, to the date above is June 2, 2013
-    var displayDate = jQuery.datepicker.formatDate('yy-mm-dd', new Date());   // "2013-09-13"
-        // this default behavior depends on jQuery UI's datepicker script
+    var displayDate = jQuery.datepicker.formatDate('yy-mm-dd', new Date()); // "2013-09-13"
+    // this default behavior depends on jQuery UI's datepicker script
     var qsTest = window.location.search.split('?');
     if ((qsTest.length === 2) && (qsTest[1].indexOf('date=') === 0)) {
         // replace today's date with the one specified
         displayDate = qsTest[1].split('=')[1];
     }
     // show any slides that have a publication date of today or earlier
-    jQuery('#dryad-home-carousel div.bxslider div').each( function() {
+    jQuery('#dryad-home-carousel div.bxslider div').each(function() {
         var $slide = jQuery(this);
         var itsPubDate = $slide.find('.publication-date').text();
         if ((itsPubDate !== '') && (displayDate >= itsPubDate)) {
@@ -208,9 +193,9 @@ jQuery(document).ready(function() {
     jQuery('#dryad-home-carousel .bxslider').bxSlider({
         auto: true,
         autoHover: true,
-        pause: 6000,  // in ms
-        speed: 500,   // ms for slide transition
-        mode: 'fade',  // can be 'horizontal', 'vertical', 'fade'
+        pause: 6000, // in ms
+        speed: 500, // ms for slide transition
+        mode: 'fade', // can be 'horizontal', 'vertical', 'fade'
         controls: false,
         autoControls: false,
         autoControlsCombine: true
@@ -225,18 +210,19 @@ jQuery(document).ready(function() {
         // callback for retrieved currency info
         var updateTable = function(amountsByCurrency) {
             if (amountsByCurrency === null) noCurrencyData(null, "Fail", "Null data");
+
             function showPreferredCurrency(currencyCode) {
                 // EXAMPLE: showPreferredCurrency('GBP');
                 var replacements = {
-                    ".revenueThreshold" : amountsByCurrency[currencyCode].revenueThreshold,
-                    ".smallOrgFee"      : amountsByCurrency[currencyCode].smallOrgFee,
-                    ".largeOrgFee"      : amountsByCurrency[currencyCode].largeOrgFee,
-                    ".advocateFee"      : amountsByCurrency[currencyCode].advocateFee,
-		    ".instFeeLevel1"      : amountsByCurrency[currencyCode].instFeeLevel1,
-		    ".instFeeLevel2"      : amountsByCurrency[currencyCode].instFeeLevel2,
-		    ".instFeeLevel3"      : amountsByCurrency[currencyCode].instFeeLevel3
+                    ".revenueThreshold": amountsByCurrency[currencyCode].revenueThreshold,
+                    ".smallOrgFee": amountsByCurrency[currencyCode].smallOrgFee,
+                    ".largeOrgFee": amountsByCurrency[currencyCode].largeOrgFee,
+                    ".advocateFee": amountsByCurrency[currencyCode].advocateFee,
+                    ".instFeeLevel1": amountsByCurrency[currencyCode].instFeeLevel1,
+                    ".instFeeLevel2": amountsByCurrency[currencyCode].instFeeLevel2,
+                    ".instFeeLevel3": amountsByCurrency[currencyCode].instFeeLevel3
                 };
-		jQuery.each(['.msg-less_than_10_million', '.msg-greater_than_10_million', '.msg-advocate-all-organizations', '.msg-inst_level1', '.msg-inst_level2', '.msg-inst_level3', '.msg-inst_level0'], function(i,klass) {
+                jQuery.each(['.msg-less_than_10_million', '.msg-greater_than_10_million', '.msg-advocate-all-organizations', '.msg-inst_level1', '.msg-inst_level2', '.msg-inst_level3', '.msg-inst_level0'], function(i, klass) {
                     var $elt = jQuery(klass);
                     if ($elt.length === 0) return;
                     jQuery.each(replacements, function(prop, val) {
@@ -244,23 +230,23 @@ jQuery(document).ready(function() {
                             $elt.find(prop).text(val);
                         }
                     });
-               }); 
+                });
             }
             // choosing a currency should modify the displayed org-revenue threshold and fees
             $currencySelector.unbind('change').change(function() {
-                showPreferredCurrency( $(this).val() );
+                showPreferredCurrency($(this).val());
             });
             // show initial values in USD (don't rely on i18n-message text!)
             showPreferredCurrency('USD');
         }
-        var noCurrencyData = function(/*jQuery.jqXHR*/ jqXHR, /*String*/ textStatus, /*String*/ errorThrown) {
+        var noCurrencyData = function( /*jQuery.jqXHR*/ jqXHR, /*String*/ textStatus, /*String*/ errorThrown) {
             // console.log(textStatus);
         }
         jQuery.ajax({
             dataType: 'json',
-            url:      document.location.protocol + '//' + document.location.host + '/static/json/membership-form.json',
-            success:  updateTable,
-            error:    noCurrencyData
+            url: document.location.protocol + '//' + document.location.host + '/static/json/membership-form.json',
+            success: updateTable,
+            error: noCurrencyData
         });
     }
 });
@@ -268,124 +254,124 @@ jQuery(document).ready(function() {
 /* JS behaviors for FAQ page only */
 // Enable expanding FAQ via JS (else jump to answers)
 jQuery(document).ready(function() {
-        if (jQuery('.faq-answers').length === 0) {
-            // no FAQ on this page, never mind
-            return;
-        }
+    if (jQuery('.faq-answers').length === 0) {
+        // no FAQ on this page, never mind
+        return;
+    }
 
-        var qLinkCloseText = 'Close';
+    var qLinkCloseText = 'Close';
 
-        // hide all answers (we'll bring them up as needed)
-        jQuery('.faq-answers').hide();
-        var questionBlock = jQuery('.faq-questions');
+    // hide all answers (we'll bring them up as needed)
+    jQuery('.faq-answers').hide();
+    var questionBlock = jQuery('.faq-questions');
 
-        // strip links from section headings
-        questionBlock.find('h2 a').each(function() {
-            // transfer its href to the heading, to support inbound links
-            var targetID = jQuery(this).attr('href').split('#')[1];
-            jQuery('#'+targetID).remove();
-            var heading = jQuery(this).parent();
-            heading.attr('id', targetID);
-            // strip the hyperlink, to leave a simple header
-            jQuery(this).replaceWith(jQuery(this).html());
-        });
+    // strip links from section headings
+    questionBlock.find('h2 a').each(function() {
+        // transfer its href to the heading, to support inbound links
+        var targetID = jQuery(this).attr('href').split('#')[1];
+        jQuery('#' + targetID).remove();
+        var heading = jQuery(this).parent();
+        heading.attr('id', targetID);
+        // strip the hyperlink, to leave a simple header
+        jQuery(this).replaceWith(jQuery(this).html());
+    });
 
-        // wire remaining links to toggle w/ answer panel
-        questionBlock.find('a').unbind('click').click(function() {
-            var qLink = jQuery(this);
-            var qListItem = qLink.closest('li');
-            // strip off preceding '#' and complete URL, if found
-            var aHref = qLink.attr('href');
-            if (typeof(aHref) === 'string') {
-                aHref = aHref.split('#')[1];
-            } else {
-                console.log('No HREF found for this link:\n'+ qLink.text());
-                return false;
-            }
-            if (qLink.text() === qLinkCloseText) {
-                // hide answer and restore link question
-                qLink.html( unescape(qLink.attr('full-question')) );
-                qLink.removeClass('question-closer');
-                qListItem.find('.answer-panel').remove();
-
-            } else {
-                // hide link question and show the matching answer
-                qLink.attr('full-question', escape(qLink.html()) );
-                qLink.text( qLinkCloseText );
-                qLink.addClass('question-closer');
-                qListItem.find('.answer-panel').remove(); // just in case
-                qListItem.append('<div class="answer-panel"></div>');
-                // find and copy the named answer below
-                /// IF well-organized in DIVs: qAnswer = jQuery('#'+ aHref).clone(false);
-                qAnswer = jQuery('#'+ aHref).nextUntil('h2[id]').andSelf().clone(false);
-                qListItem.find('.answer-panel').append( qAnswer );
-            }
+    // wire remaining links to toggle w/ answer panel
+    questionBlock.find('a').unbind('click').click(function() {
+        var qLink = jQuery(this);
+        var qListItem = qLink.closest('li');
+        // strip off preceding '#' and complete URL, if found
+        var aHref = qLink.attr('href');
+        if (typeof(aHref) === 'string') {
+            aHref = aHref.split('#')[1];
+        } else {
+            console.log('No HREF found for this link:\n' + qLink.text());
             return false;
-        });
-
-        // add 'Open/Close all answers' trigger
-        questionBlock.prepend('<a id="all-faq-toggle" href="#" style="float: right;">Open all answers</a>');
-        jQuery('#all-faq-toggle').unbind('click').click(function() {
-            var toggle = jQuery(this);
-            if (toggle.text().indexOf('Open') > -1) {
-                // open all answers and update label
-                questionBlock.find('li > a').each(function() {
-                    if (jQuery(this).text() !== qLinkCloseText) {
-                        jQuery(this).click();
-                    }
-                });
-                toggle.text('Close all answers');
-            } else {
-                // close all answers and update label
-                questionBlock.find('li > a').each(function() {
-                    if (jQuery(this).text() === qLinkCloseText) {
-                        jQuery(this).click();
-                    }
-                });
-                toggle.text('Open all answers');
-            }
-        });
-
-        // IF we've just entered the page with a #fragment specified, try to go to it
-        var inboundAnswerID = window.location.hash;
-        if (inboundAnswerID !== '') {
-            var targetAnswer = jQuery( inboundAnswerID ); // eg, '#payment-plans'
-            // IF it's a valid target, toggle this answer open and jump to it
-            if (targetAnswer.length === 1) {
-                questionBlock.find('li a[href$='+ inboundAnswerID +']').click();
-                // NOTE: there are now *two* elements with this ID, but the visible clone
-                // will always respond to a simple ID selector because it's first in DOM.
-                jQuery(document).scrollTop( jQuery( inboundAnswerID ).offset().top );
-            }
         }
+        if (qLink.text() === qLinkCloseText) {
+            // hide answer and restore link question
+            qLink.html(unescape(qLink.attr('full-question')));
+            qLink.removeClass('question-closer');
+            qListItem.find('.answer-panel').remove();
+
+        } else {
+            // hide link question and show the matching answer
+            qLink.attr('full-question', escape(qLink.html()));
+            qLink.text(qLinkCloseText);
+            qLink.addClass('question-closer');
+            qListItem.find('.answer-panel').remove(); // just in case
+            qListItem.append('<div class="answer-panel"></div>');
+            // find and copy the named answer below
+            /// IF well-organized in DIVs: qAnswer = jQuery('#'+ aHref).clone(false);
+            qAnswer = jQuery('#' + aHref).nextUntil('h2[id]').andSelf().clone(false);
+            qListItem.find('.answer-panel').append(qAnswer);
+        }
+        return false;
+    });
+
+    // add 'Open/Close all answers' trigger
+    questionBlock.prepend('<a id="all-faq-toggle" href="#" style="float: right;">Open all answers</a>');
+    jQuery('#all-faq-toggle').unbind('click').click(function() {
+        var toggle = jQuery(this);
+        if (toggle.text().indexOf('Open') > -1) {
+            // open all answers and update label
+            questionBlock.find('li > a').each(function() {
+                if (jQuery(this).text() !== qLinkCloseText) {
+                    jQuery(this).click();
+                }
+            });
+            toggle.text('Close all answers');
+        } else {
+            // close all answers and update label
+            questionBlock.find('li > a').each(function() {
+                if (jQuery(this).text() === qLinkCloseText) {
+                    jQuery(this).click();
+                }
+            });
+            toggle.text('Open all answers');
+        }
+    });
+
+    // IF we've just entered the page with a #fragment specified, try to go to it
+    var inboundAnswerID = window.location.hash;
+    if (inboundAnswerID !== '') {
+        var targetAnswer = jQuery(inboundAnswerID); // eg, '#payment-plans'
+        // IF it's a valid target, toggle this answer open and jump to it
+        if (targetAnswer.length === 1) {
+            questionBlock.find('li a[href$=' + inboundAnswerID + ']').click();
+            // NOTE: there are now *two* elements with this ID, but the visible clone
+            // will always respond to a simple ID selector because it's first in DOM.
+            jQuery(document).scrollTop(jQuery(inboundAnswerID).offset().top);
+        }
+    }
 
 });
-function updateOrder(){
+
+function updateOrder() {
     var transactionId = document.getElementsByName("transactionId")[0].value;
-    var country =document.getElementsByName("country")[0].value;
+    var country = document.getElementsByName("country")[0].value;
     var currency = "USD";
-    if(document.getElementsByName("currency")){
+    if (document.getElementsByName("currency")) {
         currency = document.getElementsByName("currency")[0].value;
     }
 
-    var journal =jQuery("#aspect_submission_StepTransformer_field_prism_publicationName").val();
-    if(journal=="undefined")
-    {
+    var journal = jQuery("#aspect_submission_StepTransformer_field_prism_publicationName").val();
+    if (journal == "undefined") {
         journal = "";
     }
     var voucher = jQuery("#aspect_paymentsystem_ShoppingCartTransformer_field_voucher").val();
     var baseUrl = document.getElementsByName("baseUrl")[0].value;
-    var searchUrl =baseUrl+"/JSON/transaction/shoppingcart?country="+country+"&currency="+currency+"&transactionId="+transactionId+"&journal="+journal+"&voucher="+voucher;
+    var searchUrl = baseUrl + "/JSON/transaction/shoppingcart?country=" + country + "&currency=" + currency + "&transactionId=" + transactionId + "&journal=" + journal + "&voucher=" + voucher;
     jQuery.ajax({
         url: searchUrl,
-        beforeSend: function ( xhr ) {
+        beforeSend: function(xhr) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
         }
-    }).done(function ( data ) {
-            obj = jQuery.parseJSON(data);
-            showShoppingCartMessage(obj);
-            shoeShoppingCartWaiver(obj);
-        });
+    }).done(function(data) {
+        obj = jQuery.parseJSON(data);
+        showShoppingCartMessage(obj);
+        shoeShoppingCartWaiver(obj);
+    });
 }
 
 /* JS behavior (currency conversion) for Pricing and Integrated Journal pages */
@@ -393,50 +379,62 @@ jQuery(document).ready(function() {
     if (!document.getElementById('journal-policies')) return;
     // initialize dataTable scroller
     var journal_data = document.location.protocol + '//' + document.location.host + '/static/json/journal-lookup.json';
-    var columns = [
-        { "data" : "title"      }
-      , { "data" : "integrated" }
-      , { "data" : "submission" }
-      , { "data" : "embargo"    }
-      , { "data" : "hidden"     }
-      , { "data" : "sponsor"    }
-      , { "data" : "issn"       }
-    ];
+    var columns = [{
+        "data": "title"
+    }, {
+        "data": "integrated"
+    }, {
+        "data": "submission"
+    }, {
+        "data": "embargo"
+    }, {
+        "data": "hidden"
+    }, {
+        "data": "sponsor"
+    }, {
+        "data": "issn"
+    }];
     var columnDefs = [{
-        "targets"    : [6] // issn
-      , "visible"    : false
-      , "searchable" : true
+        "targets": [6] // issn
+            ,
+        "visible": false,
+        "searchable": true
     }];
     var apply_cell_markup = function(row, data, index) {
-      // add link to /journal/nnnn-nnnn page if issn is available
-      if (data.issn) {
-          if (data.integrated === "Y" || data.sponsor !== "$120") {
-              var $link = $('<a></a>');
-              $link.attr('href', '/journal/' + data.issn);
-              $link.text(data.title);
-              $('td:eq(0)', row).text('');
-              $('td:eq(0)', row).append($link);
-          }
-      }
-      // apply markup for the currency selector
-      if (data.sponsor.match(/^\$/)) {
-        var $span = $('<span class="msg-DPC_pay_on_submission"></span>');
-        $span.text(data.sponsor);
-        $('td:eq(5)', row).text('');
-        $('td:eq(5)', row).append($span);
-      }
+        // add link to /journal/nnnn-nnnn page if issn is available
+        if (data.issn) {
+            if (data.integrated === "Y" || data.sponsor !== "$120") {
+                var $link = $('<a></a>');
+                $link.attr('href', '/journal/' + data.issn);
+                $link.text(data.title);
+                $('td:eq(0)', row).text('');
+                $('td:eq(0)', row).append($link);
+            }
+        }
+        // apply markup for the currency selector
+        if (data.sponsor.match(/^\$/)) {
+            var $span = $('<span class="msg-DPC_pay_on_submission"></span>');
+            $span.text(data.sponsor);
+            $('td:eq(5)', row).text('');
+            $('td:eq(5)', row).append($span);
+        }
     };
     jQuery('#journal-policies').dataTable({
-          "autoWidth" : false
-        , "ordering"  : false   //
-        , "paging"    : true    // 
-        , "scrollY"   : 500     // px tbody height
-        , "scrollX"   : false   //
-        , "searching" : true    //
-        , "ajax"      : journal_data
-        , "columns"   : columns
-        , "columnDefs": columnDefs
-        , "rowCallback" : apply_cell_markup
+        "autoWidth": false,
+        "ordering": false //
+            ,
+        "paging": true // 
+            ,
+        "scrollY": 500 // px tbody height
+            ,
+        "scrollX": false //
+            ,
+        "searching": true //
+            ,
+        "ajax": journal_data,
+        "columns": columns,
+        "columnDefs": columnDefs,
+        "rowCallback": apply_cell_markup
     });
     var $currencySelector = jQuery('select[name=displayed-currency]');
     // in this case, we just want to update a few displayed values wherever
@@ -457,19 +455,19 @@ jQuery(document).ready(function() {
             }
             // choosing a currency should modify the displayed org-revenue threshold and fees
             $currencySelector.unbind('change').change(function() {
-                showPreferredCurrency( $(this).val() );
+                showPreferredCurrency($(this).val());
             });
             // show initial values in USD (don't rely on i18n-message text!)
             showPreferredCurrency('USD');
         }
-        var noPaymentPlanData = function(/*jQuery.jqXHR*/ jqXHR, /*String*/ textStatus, /*String*/ errorThrown) {
+        var noPaymentPlanData = function( /*jQuery.jqXHR*/ jqXHR, /*String*/ textStatus, /*String*/ errorThrown) {
             // console.log(textStatus);
         };
         jQuery.ajax({
             dataType: 'json',
-            url:      document.location.protocol + '//' + document.location.host + '/static/json/payment-plan.json',
-            success:  updatePaymentPlanTable,
-            error:    noPaymentPlanData
+            url: document.location.protocol + '//' + document.location.host + '/static/json/payment-plan.json',
+            success: updatePaymentPlanTable,
+            error: noPaymentPlanData
         });
     }
 });
@@ -479,8 +477,7 @@ function initTermsOfService() {
     $("#aspect_eperson_TermsOfService_div_background").toggleClass("active");
     $("#aspect_eperson_TermsOfService_div_modal-content").toggleClass("active");
 
-
-    $("#aspect_eperson_TermsOfService_field_submit").click(function(){
+    $("#aspect_eperson_TermsOfService_field_submit").click(function() {
         $("#aspect_eperson_TermsOfService_div_background").toggleClass("active");
         $("#aspect_eperson_TermsOfService_div_modal-content").toggleClass("active");
 
@@ -491,60 +488,57 @@ function initTermsOfService() {
 
 }
 
-function removeVoucher(){
+function removeVoucher() {
     var transactionId = document.getElementsByName("transactionId")[0].value;
-    var country =document.getElementsByName("country")[0].value;
-    var currency =document.getElementsByName("currency")[0].value;
-    var journal =jQuery("#aspect_submission_StepTransformer_field_prism_publicationName").val();
-    if(journal=="undefined")
-    {
+    var country = document.getElementsByName("country")[0].value;
+    var currency = document.getElementsByName("currency")[0].value;
+    var journal = jQuery("#aspect_submission_StepTransformer_field_prism_publicationName").val();
+    if (journal == "undefined") {
         journal = "";
     }
     var voucher = "";
     var baseUrl = document.getElementsByName("baseUrl")[0].value;
-    var searchUrl =baseUrl+"/JSON/transaction/shoppingcart?country="+country+"&currency="+currency+"&transactionId="+transactionId+"&journal="+journal+"&voucher="+voucher;
+    var searchUrl = baseUrl + "/JSON/transaction/shoppingcart?country=" + country + "&currency=" + currency + "&transactionId=" + transactionId + "&journal=" + journal + "&voucher=" + voucher;
     jQuery.ajax({
         url: searchUrl,
-        beforeSend: function ( xhr ) {
+        beforeSend: function(xhr) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
         }
-    }).done(function ( data ) {
-            obj = jQuery.parseJSON(data);
+    }).done(function(data) {
+        obj = jQuery.parseJSON(data);
 
-            showShoppingCartMessage(obj);
-            shoeShoppingCartWaiver(obj);
+        showShoppingCartMessage(obj);
+        shoeShoppingCartWaiver(obj);
 
-
-        });
+    });
 }
 
-
-function removeCountry(){
+function removeCountry() {
     var transactionId = document.getElementsByName("transactionId")[0].value;
-    var country ="";
-    var currency =document.getElementsByName("currency")[0].value;
-    var journal =jQuery("#aspect_submission_StepTransformer_field_prism_publicationName").val();
-    if(journal=="undefined")
-    {
+    var country = "";
+    var currency = document.getElementsByName("currency")[0].value;
+    var journal = jQuery("#aspect_submission_StepTransformer_field_prism_publicationName").val();
+    if (journal == "undefined") {
         journal = "";
     }
     var voucher = jQuery("#aspect_paymentsystem_ShoppingCartTransformer_field_voucher").val();
     var baseUrl = document.getElementsByName("baseUrl")[0].value;
-    var searchUrl =baseUrl+"/JSON/transaction/shoppingcart?country="+country+"&currency="+currency+"&transactionId="+transactionId+"&journal="+journal+"&voucher="+voucher;
+    var searchUrl = baseUrl + "/JSON/transaction/shoppingcart?country=" + country + "&currency=" + currency + "&transactionId=" + transactionId + "&journal=" + journal + "&voucher=" + voucher;
     jQuery.ajax({
         url: searchUrl,
-        beforeSend: function ( xhr ) {
+        beforeSend: function(xhr) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
         }
-    }).done(function ( data ) {
-            obj = jQuery.parseJSON(data);
+    }).done(function(data) {
+        obj = jQuery.parseJSON(data);
 
-            showShoppingCartMessage(obj);
-            shoeShoppingCartWaiver(obj);
+        showShoppingCartMessage(obj);
+        shoeShoppingCartWaiver(obj);
 
-        });
+    });
 }
-function showShoppingCartMessage(obj){
+
+function showShoppingCartMessage(obj) {
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_price div').html(obj.price);
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_total div').html(obj.total);
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_surcharge div').html(obj.surcharge);
@@ -552,53 +546,37 @@ function showShoppingCartMessage(obj){
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_waiver-info').html(obj.waiverMessage);
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_payer div').html(obj.payer);
 }
-function shoeShoppingCartWaiver(obj){
-    if(obj==null)
-    {
+
+function shoeShoppingCartWaiver(obj) {
+    if (obj == null) {
         //initial
-        if(jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').html().length==0&&jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').val().length==0&&jQuery(':input[name="country"]').val()==0)
-        {
+        if (jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').html().length == 0 && jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').val().length == 0 && jQuery(':input[name="country"]').val() == 0) {
             showEmptyCountry();
-        }
-        else
-        {
-            if(jQuery(':input[name="country"]').val()!=null)
-            {
+        } else {
+            if (jQuery(':input[name="country"]').val() != null) {
                 hideVoucher();
                 showRemoveCountry(null);
             }
-            if(jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').html().length!=0||jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').val().length!=0)
-            {
+            if (jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').html().length != 0 || jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').val().length != 0) {
                 hideCountry();
                 showRemoveVoucher(null);
             }
         }
-    }
-    else
-    {
-        if(obj.voucher==''&&obj.country=='')
-        {
+    } else {
+        if (obj.voucher == '' && obj.country == '') {
 
             showEmptyVoucher();
             showEmptyCountry();
 
-        }
-        else
-        {
-            if(obj.voucher!='')
-            {
+        } else {
+            if (obj.voucher != '') {
                 showRemoveVoucher(obj);
-            }
-            else
-            {
+            } else {
                 hideVoucher();
             }
-            if(obj.country!='')
-            {
+            if (obj.country != '') {
                 showRemoveCountry(obj);
-            }
-            else
-            {
+            } else {
                 hideCountry();
             }
 
@@ -606,7 +584,7 @@ function shoeShoppingCartWaiver(obj){
     }
 }
 
-function showEmptyCountry(){
+function showEmptyCountry() {
     //console.log("show empty country");
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_country-list').show();
     jQuery(':input[name="country"]').show();
@@ -615,7 +593,8 @@ function showEmptyCountry(){
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-country a').html('Remove country: ');
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-country a').hide();
 }
-function showEmptyVoucher(){
+
+function showEmptyVoucher() {
     //console.log("show empty voucher");
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_voucher-list').show();
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-voucher a').html('Remove voucher: ');
@@ -624,52 +603,55 @@ function showEmptyVoucher(){
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').val('');
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').html('');
 }
-function showRemoveCountry(obj){
+
+function showRemoveCountry(obj) {
     console.log("show country");
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_country-list').show();
     jQuery(':input[name="country"]').show();
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_country-list div').hide();
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-country a').show();
-    if(obj!=null)
-    {
-        jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-country a').html('Remove country: '+obj.country);
+    if (obj != null) {
+        jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-country a').html('Remove country: ' + obj.country);
     }
 
 }
-function showRemoveVoucher(obj){
+
+function showRemoveVoucher(obj) {
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_voucher-list').show();
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_voucher-list div').hide();
     jQuery(':input[name="country"]').hide();
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-voucher a').show();
-    if(obj!=null){
-        jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-voucher a').html('Remove voucher: '+obj.voucher);
+    if (obj != null) {
+        jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-voucher a').html('Remove voucher: ' + obj.voucher);
         jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').html(obj.voucher);
         jQuery('#aspect_paymentsystem_ShoppingCartTransformer_field_voucher').val(obj.voucher);
     }
 }
-function hideCountry(){
+
+function hideCountry() {
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_country-list').hide();
     jQuery(':input[name="country"]').hide();
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-country a').hide();
 }
-function hideVoucher(){
+
+function hideVoucher() {
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_voucher-list').hide();
     jQuery('#aspect_paymentsystem_ShoppingCartTransformer_item_remove-voucher a').hide();
 }
 
-function updateCountry(){
+function updateCountry() {
     var transactionId = document.getElementsByName("transactionId")[0].value;
-    var country =document.getElementsByName("country")[0].value;
+    var country = document.getElementsByName("country")[0].value;
 
     var voucher = jQuery("#aspect_paymentsystem_ShoppingCartTransformer_field_voucher").val();
     var baseUrl = document.getElementsByName("baseUrl")[0].value;
-    var searchUrl =baseUrl+"/JSON/transaction/shoppingcart?country="+country+"&transactionId="+transactionId;
+    var searchUrl = baseUrl + "/JSON/transaction/shoppingcart?country=" + country + "&transactionId=" + transactionId;
     jQuery.ajax({
         url: searchUrl,
-        beforeSend: function ( xhr ) {
+        beforeSend: function(xhr) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
         }
-    }).done(function ( data ) {
-            obj = jQuery.parseJSON(data);
-        });
+    }).done(function(data) {
+        obj = jQuery.parseJSON(data);
+    });
 }
